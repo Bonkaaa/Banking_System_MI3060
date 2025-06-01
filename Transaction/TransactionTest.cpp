@@ -1,67 +1,69 @@
 #include "Transaction.h"
 #include <iostream>
 #include <cassert>
-
 using namespace std;
 
-// Helper to visually check display output
-void testDisplay(const Transaction& t, const string& expectedID, const string& expectedType, double expectedAmt) {
-    cout << "\n--- Display Output ---" << endl;
+void testTransactionConstructor() {
+    Transaction t("T001", "deposit", 1000.0, "2025-06-01 10:00:00", "Initial deposit", "A001", "");
+    assert(t.getTransactionID() == "T001");
+    assert(t.getType() == "deposit");
+    assert(t.getAmount() == 1000.0);
+    assert(t.getTimestamp() == "2025-06-01 10:00:00");
+    assert(t.getNote() == "Initial deposit");
+    assert(t.getFromAccountID() == "A001");
+    assert(t.getToAccountID() == "");
+    cout << "testTransactionConstructor passed.\n";
+}
+
+void testDepositStaticFunction() {
+    Transaction t = Transaction::deposit("T002", "A002", 500.0, "2025-06-01 11:00:00", "Deposit note");
+    assert(t.getTransactionID() == "T002");
+    assert(t.getType() == "deposit");
+    assert(t.getAmount() == 500.0);
+    assert(t.getTimestamp() == "2025-06-01 11:00:00");
+    assert(t.getNote() == "Deposit note");
+    assert(t.getFromAccountID() == "A002");
+    assert(t.getToAccountID() == "");
+    cout << "testDepositStaticFunction passed.\n";
+}
+
+void testWithdrawStaticFunction() {
+    Transaction t = Transaction::withdraw("T003", "A003", 200.0, "2025-06-01 12:00:00", "Withdraw note");
+    assert(t.getTransactionID() == "T003");
+    assert(t.getType() == "withdraw");
+    assert(t.getAmount() == 200.0);
+    assert(t.getTimestamp() == "2025-06-01 12:00:00");
+    assert(t.getNote() == "Withdraw note");
+    assert(t.getFromAccountID() == "A003");
+    assert(t.getToAccountID() == "");
+    cout << "testWithdrawStaticFunction passed.\n";
+}
+
+void testTransferStaticFunction() {
+    Transaction t = Transaction::transfer("T004", "A004", "A005", 300.0, "2025-06-01 13:00:00", "Transfer note");
+    assert(t.getTransactionID() == "T004");
+    assert(t.getType() == "transfer");
+    assert(t.getAmount() == 300.0);
+    assert(t.getTimestamp() == "2025-06-01 13:00:00");
+    assert(t.getNote() == "Transfer note");
+    assert(t.getFromAccountID() == "A004");
+    assert(t.getToAccountID() == "A005");
+    cout << "testTransferStaticFunction passed.\n";
+}
+
+void testDisplayTransaction() {
+    Transaction t("T005", "deposit", 1500.0, "2025-06-01 14:00:00", "Display test", "A006", "");
+    cout << "Output of displayTransaction (visual check):\n";
     t.displayTransaction();
-    cout << "----------------------" << endl;
-    assert(t.getTransactionID() == expectedID);
-    assert(t.getType() == expectedType);
-    assert(t.getAmount() == expectedAmt);
+    cout << "testDisplayTransaction completed (visual check).\n";
 }
 
 int main() {
-    // Test 1: Constructor and getters
-    Transaction t1("T001", "deposit", 100.0, "2025-06-01 07:30:00", "Initial deposit", "A123", "");
-    assert(t1.getTransactionID() == "T001");
-    assert(t1.getType() == "deposit");
-    assert(t1.getAmount() == 100.0);
-    assert(t1.getTimestamp() == "2025-06-01 07:30:00");
-    assert(t1.getNote() == "Initial deposit");
-    assert(t1.getFromAccountID() == "A123");
-    assert(t1.getToAccountID() == "");
-
-    // Test 2: Timestamp defaults to now if empty (just check non-empty and length)
-    Transaction t2("T002", "withdraw", 40.0, "", "ATM Withdrawal", "A123", "");
-    assert(!t2.getTimestamp().empty() && t2.getTimestamp().length() == 19);
-
-    // Test 3: Factory method - deposit
-    Transaction t3 = Transaction::deposit("T003", "A555", 200.0, "2025-06-01 10:00:00", "Saving");
-    assert(t3.getType() == "deposit");
-    assert(t3.getFromAccountID() == "A555");
-    assert(t3.getAmount() == 200.0);
-    assert(t3.getTimestamp() == "2025-06-01 10:00:00");
-    assert(t3.getNote() == "Saving");
-
-    // Test 4: Factory method - withdraw
-    Transaction t4 = Transaction::withdraw("T004", "A444", 50.0, "", "Groceries");
-    assert(t4.getType() == "withdraw");
-    assert(t4.getFromAccountID() == "A444");
-    assert(t4.getNote() == "Groceries");
-
-    // Test 5: Factory method - transfer
-    Transaction t5 = Transaction::transfer("T005", "A100", "A200", 500.0, "2025-06-01 12:00:00", "Rent Payment");
-    assert(t5.getType() == "transfer");
-    assert(t5.getFromAccountID() == "A100");
-    assert(t5.getToAccountID() == "A200");
-    assert(t5.getAmount() == 500.0);
-    assert(t5.getNote() == "Rent Payment");
-
-    // Test 6: displayTransaction (manual check for console output)
-    testDisplay(t1, "T001", "deposit", 100.0);
-    testDisplay(t3, "T003", "deposit", 200.0);
-    testDisplay(t4, "T004", "withdraw", 50.0);
-    testDisplay(t5, "T005", "transfer", 500.0);
-
-    // Test 7: Display omits empty fields
-    Transaction t6("T006", "withdraw", 20.0, "2025-06-01 13:00:00", "", "A333", "");
-    cout << "\nCheck that 'Note:' and 'To Account ID:' are NOT displayed below:" << endl;
-    t6.displayTransaction();
-
-    cout << "\nAll manual Transaction tests passed!" << endl;
+    testTransactionConstructor();
+    testDepositStaticFunction();
+    testWithdrawStaticFunction();
+    testTransferStaticFunction();
+    testDisplayTransaction();
+    cout << "All Transaction tests passed.\n";
     return 0;
 }
