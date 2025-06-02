@@ -21,6 +21,14 @@ class Transaction {
         string fromAccountID; // For transfer transactions
         string toAccountID; // For transfer transactions
 
+		TransactionNode* transactionHead; // Pointer to the head of the linked list
+
+        // Linked list to store transaction history
+        struct TransactionNode {
+            Transaction transaction;
+            TransactionNode* next;
+			TransactionNode(const Transaction& trans) : transaction(trans), next(nullptr) {}
+        };
 
     public:
         // Constructor
@@ -46,6 +54,19 @@ class Transaction {
         // Display Function
         void displayTransaction() const;
 
+        // Add a transaction to the account's transaction history
+        void addTransaction(
+            const string& type,
+            double amount,
+            const string& timeStamp = "",
+            const string& note = "",
+            const string& fromID = "",
+            const string& toID = ""
+        );
+
+		bool isTransactionIDExists(const string& transID) const
+
+
         // Transaction Functions
         static Transaction deposit(
             const string& transID,
@@ -69,6 +90,7 @@ class Transaction {
             const string& timeStamp = "",
             const string& note = ""
         );
+
 };
 
 #endif // TRANSACTION_H

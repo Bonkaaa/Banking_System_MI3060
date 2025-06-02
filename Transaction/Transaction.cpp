@@ -41,22 +41,48 @@ string Transaction::getToAccountID() const {
 	return toAccountID;
 }
 
+// Add transaction to the account's transaction history
+void addTransaction(
+	const string& type,
+	double amount,
+	const string& timeStamp,
+	const string& note,
+	const string& fromID,
+	const string& toID
+) {
+	// Create a new transaction object and add to the account's transaction history
+	Transaction newTransaction(transactionID, type, amount, timeStamp, note, fromID, toID);
+
+	TransactionNode* newNode = new TransactionNode(newTransaction);
+	if (transactionHead == nullptr) {
+        transactionHead = newNode;
+    } else {
+        TransactionNode* temp = transactionHead;
+        while (temp->next) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
 // Display Function
-void Transaction::displayTransaction() const {
-	cout << "Transaction ID: " << transactionID << endl;
-	cout << "Type: " << transType << endl;
-	cout << "Amount: " << amount << endl;
-	cout << "Timestamp: " << timestamp << endl;
-	if (!note.empty()) {
-		cout << "Note: " << note << endl;
-	}
-	if (!fromAccountID.empty()) {
-		cout << "From Account ID: " << fromAccountID << endl;
-	}
-	if (!toAccountID.empty()) {
-		cout << "To Account ID: " << toAccountID << endl;
-	}
-	cout << "------------------------" << endl;
+// Display transaction history for a given fromAccountID
+void displayTransactionHistory(const string& fromID) {
+    TransactionNode* temp = transactionHead;
+    cout << "Transaction History for Account: " << fromID << endl;
+    while (temp) {
+        const Transaction& t = temp->transaction;
+        if (t.getFromAccountID() == fromID) {
+            cout << "ID: " << t.getTransactionID()
+                 << ", Type: " << t.getType()
+                 << ", Amount: " << t.getAmount()
+                 << ", Timestamp: " << t.getTimestamp()
+                 << ", Note: " << t.getNote()
+                 << ", To: " << t.getToAccountID()
+                 << endl;
+        }
+        temp = temp->next;
+    }
 }
 
 // Transaction Functions
@@ -100,3 +126,15 @@ string Transaction::getCurrentTime() const {
 	return string(buffer);
 }
 // Note: The getCurrentTime function formats the current time as "YYYY-MM-DD HH:MM:SS".
+
+// Check if a transaction ID already exists
+bool Transaction::isTransactionIDExists(const string& transID) const {
+    TransactionNode* temp = transactionHead;
+    while (temp) {
+        if (temp->transaction.getTransactionID() == transID) {
+            return true; // Transaction ID already exists
+        }
+        temp = temp->next;
+    }
+    return false; // Transaction ID does not exist
+}

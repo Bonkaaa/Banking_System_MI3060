@@ -8,20 +8,12 @@ using namespace std;
 
 class Account {
     private:
-        struct TransactionNode {
-            string type; // "deposit" or "withdrawal"
-            double amount;
-            TransactionNode* next;
-            
-            TransactionNode(const string& t, double a) : type(t), amount(a), next(nullptr) {}
-        };
-    
+
         string accountID;
         string ownerName;
         double balance;
         string pin;
         string status; // "active" or "inactive"
-        TransactionNode* transactionHead;
 
     public:
         // Constructor and Destructor
@@ -44,8 +36,5 @@ class Account {
         void lockAccount();
         void unlockAccount();
 
-        // Transaction Management
-        void addTransaction(const string& type, double amount);
-        void displayTransactions() const;
 };
 #endif
