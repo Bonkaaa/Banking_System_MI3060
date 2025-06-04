@@ -20,7 +20,6 @@ class Bank {
         void createAccount();
 
         // Find account by ID, returns pointer to Account or nullptr if not found
-        Account* findAccountByID(const string& id);
 
         // Show information of an account by ID
         void showAccountInfo(const string& id);

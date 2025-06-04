@@ -27,13 +27,10 @@ void Bank::createAccount() {
     cout << "Account created successfully.\n";
 }
 
-Account* Bank::findAccountByID(const string& id) {
     for (auto& account : accountList) {
         if (account.getID() == id) {
-            return &account; // Return pointer to the found account
         }
     }
-    return nullptr; // Return nullptr if not found
 }
 
 void Bank::showAccountInfo(const string& id) {
