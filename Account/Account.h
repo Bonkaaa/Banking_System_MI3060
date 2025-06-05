@@ -18,7 +18,7 @@ class Account {
     public:
         // Constructor and Destructor
         Account(const string& id, const string& name, const string& p, double initialBalance)
-            : accountID(id), ownerName(name), balance(initialBalance), pin(p), status("active"), transactionHead(nullptr) {}
+            : accountID(id), ownerName(name), balance(initialBalance), pin(p), status("active") {}
 
         ~Account();
 

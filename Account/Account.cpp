@@ -5,11 +5,6 @@ using namespace std;
 
 
 Account::~Account() {
-    while (transactionHead) {
-        TransactionNode* temp = transactionHead;
-        transactionHead = transactionHead->next;
-        delete temp;
-    }
 }  
 
 // Getters

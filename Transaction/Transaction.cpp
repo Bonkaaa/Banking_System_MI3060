@@ -1,6 +1,10 @@
 #include "Transaction.h"
 #include <iostream>
+#include <ctime>
+#include <iomanip>
 using namespace std;
+
+TransactionNode* transactionHead = nullptr; // Initialize the head of the linked list
 
 Transaction::Transaction(
 	const string& transID,
@@ -43,6 +47,7 @@ string Transaction::getToAccountID() const {
 
 // Add transaction to the account's transaction history
 void addTransaction(
+	const string& transactionID,
 	const string& type,
 	double amount,
 	const string& timeStamp,
