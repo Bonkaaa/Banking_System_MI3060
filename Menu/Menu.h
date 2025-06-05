@@ -5,23 +5,25 @@
 #include <string>
 #include <limits>
 #include <vector>
+#include "../Account/Account.h"
+#include "../Bank/Bank.h"  
 using namespace std;
 
 
 class Menu {
     public:
         // Show arrow menu
-        static void ShowArrowMenu(const vector<string>& options, const string& title = "Menu");
+        static int ShowArrowMenu(const vector<string>& options, const string& title = "Menu");
 
         // Display the main menu and handle user input
-        static void MainMenu();
+        static int MainMenu();
         // Main menu function
         void Login();
         void CreateAccount();
         void Exit();
 
         // Display the admin menu and handle user input
-        static void AdminMenu(const string& adminName);
+        static int AdminMenu(const string& adminName);
         // Admin menu function
         void ViewAllAccounts();
         void SearchAccount();
@@ -29,7 +31,7 @@ class Menu {
         void LogoutAdmin();
 
         // Display the user menu for whose account is logged in
-        static void UserMenu(const Account& account);
+        static int UserMenu(const Account& account);
         // User menu function
         void ViewAccountInfo(const Account& account);
         void ChangePin(const Account& account);
@@ -37,7 +39,7 @@ class Menu {
         void LogoutUser(const Account& account);
 
         // Display transaction menu
-        static void TransactionMenu(const Account& account);
+        static int TransactionMenu(const Account& account);
         // Transaction menu function
         void Deposit(const Account& account);
         void Withdraw(const Account& account);
@@ -46,5 +48,5 @@ class Menu {
 
         // Exit the application
         static void Exit();
-
+};
 #endif // MENU_H

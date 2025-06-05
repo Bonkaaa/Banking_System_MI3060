@@ -5,7 +5,6 @@
 #include <vector>
 #include <iostream>
 #include <conio.h>
-#include <window.h>
 
 using namespace std;
 
@@ -32,7 +31,7 @@ int Menu::ShowArrowMenu(const vector<string>& options, const string& title) {
             if (ch == 72) { // lên
                 if (selected > 0) selected--;
             } else if (ch == 80) { // xuống
-                if (selected < optCount - 1) selected++;
+                if (selected < options.size() - 1) selected++;
             }
         } else if (ch == 13) { // Enter
             return selected;
@@ -120,31 +119,33 @@ void Menu::Login() {
 
 // Create Account function
 void Menu::CreateAccount() {
-    bank.createAccount(id, name, pin, initialBalance);
+    Bank bank; // Assuming you have a Bank instance
+    bank.createAccount();
 }
 
 // User Menu Functions
 void ViewAccountInfo(const Account& account) {
+    Bank bank; // Assuming you have a Bank instance
     cout << "Thong tin tai khoan:" << endl;
 	bank.showAccountInfo(account.getID());
 	system("pause");
     UserMenu(account);
 }
 
-void ChangePin(const Account& account) {
+void ChangePin(Account& account) {
     string newPin;
     cout << "Nhap ma PIN moi: ";
     cin >> newPin;
     account.changePin(newPin);
     cout << "Ma PIN da duoc thay doi thanh cong!" << endl;
-	system("pause");
+    system("pause");
     UserMenu(account);
 }
 
 void ViewTransactionsHistory(const Account& account) {
     cout << "Lich su giao dich:" << endl;
-	displayTransactionHistory(account.getID());
-    // Assuming displayTransactionHistory is a function that shows the transaction history
+    // Assuming Transaction class has a static method to display transaction history
+    Transaction::displayTransactionHistory(account.getID());
     system("pause");
     UserMenu(account);
 }
@@ -158,12 +159,15 @@ void LogoutUser(const Account& account) {
 
 // Admin Menu Functions
 void ViewAllAccounts() {
+    Bank bank; // Assuming you have a Bank instance
+    cout << "Danh sach tat ca tai khoan:" << endl;
     bank.showAllAccounts();
 	system("pause");
     AdminMenu("Admin"); // Assuming "Admin" is the admin name
 }
 
 void SearchAccount() {
+    Bank bank; // Assuming you have a Bank instance
     string id;
     cout << "Nhap ID tai khoan can tim: ";
     cin >> id;
@@ -173,6 +177,7 @@ void SearchAccount() {
 }
 
 void LockUnlockAccount() {
+    Bank bank; // Assuming you have a Bank instance
     string id;
     cout << "Nhap ID tai khoan can khoa/mo: ";
     cin >> id;
@@ -206,21 +211,27 @@ void Deposit(const Account& account) {
     if (amount <= 0) {
         cout << "So tien nap phai lon hon 0!" << endl;
         return;
+    }
     cout << "Nhap so tien nap: ";
     cin >> amount;
 
     if (amount <= 0) {
         cout << "So tien nap phai lon hon 0!" << endl;
         return;
+    }
+
 	else {
+        string note;
+        cout << "Nhap ghi chu (neu co): ";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+        getline(cin, note);
 		// Randomly generate a transaction ID for simplicity
 		string transID;
 		do {
 			transID	 = "trans" + to_string(rand() % 10000); // Random transaction ID
-		} while (Transaction.isTransactionIDExists(transID));
+		} while (Transaction::isTransactionIDExists(transID));
         Transaction newTransaction = Transaction::deposit(transID, account.getID(), amount);
-        account.addTransaction(newTransaction.getType(), newTransaction.getAmount(), newTransaction.getTimestamp(), newTransaction.getNote(), newTransaction.getFromAccountID());
-        cout << "Nap tien thanh cong!" << endl;
+        Transaction::addTransaction(transID, "deposit", amount, newTransaction.getTimestamp(), note, account.getID(), "");
     }
 
     system("pause");
@@ -236,9 +247,66 @@ void Withdraw(const Account& account) {
         cout << "So tien rut khong hop le!" << endl;
         return;
     }
+    else {
+        string note;
+        cout << "Nhap ghi chu (neu co): ";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+        getline(cin, note);
+        // Randomly generate a transaction ID for simplicity
+        string transID;
+        do {
+            transID = "trans" + to_string(rand() % 10000); // Random transaction ID
+        } while (Transaction::isTransactionIDExists(transID));
+        Transaction newTransaction = Transaction::withdraw(transID, account.getID(), amount);
+        Transaction::addTransaction(transID, "withdraw", amount, newTransaction.getTimestamp(), note, account.getID(), "");
+    }
+    system("pause");
+    UserMenu(account);
+}
+
+void Transfer(const Account& account) {
+    string toAccountID;
+    double amount;
+    cout << "Nhap ID tai khoan nhan: ";
+    cin >> toAccountID;
+    cout << "Nhap so tien chuyen: ";
+    cin >> amount;
+
+    if (amount <= 0 || amount > account.getBalance()) {
+        cout << "So tien chuyen khong hop le!" << endl;
+        return;
+    }
+
+    Bank bank; // Assuming you have a Bank instance
+    Account* toAccount = bank.findAccountByID(toAccountID);
+    if (!toAccount) {
+        cout << "Khong tim thay tai khoan voi ID: " << toAccountID << endl;
+        return;
+    }
+
+    string note;
+    cout << "Nhap ghi chu (neu co): ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+    getline(cin, note);
 
     // Randomly generate a transaction ID for simplicity
-    string transID = "trans"
+    string transID;
+    do {
+        "transID = " + to_string(rand() % 10000); // Random transaction ID
+    } while (Transaction::isTransactionIDExists(transID));
+    Transaction newTransaction = Transaction::transfer(transID, account.getID(), toAccountID, amount);
+    Transaction::addTransaction(transID, "transfer", amount, newTransaction.getTimestamp(), note, account.getID(), toAccountID);
+    cout << "Chuyen khoan thanh cong!" << endl;
+    system("pause");
+    UserMenu(account);
+}
+
+void BackToUserMenu(const Account& account) {
+    UserMenu(account);
+}
+
+
+    
 
 
 
