@@ -6,21 +6,18 @@ using namespace std;
 
 TransactionNode* transactionHead = nullptr; // Initialize the head of the linked list
 
+// Constructor with parameters
 Transaction::Transaction(
 	const string& transID,
 	const string& type,
-	double amt,
+	double amount,
 	const string& timeStamp,
 	const string& note,
 	const string& fromID,
 	const string& toID
-) : transactionID(transID), transType(type), amount(amt), note(note), fromAccountID(fromID), toAccountID(toID) {
-	if (timeStamp.empty()) {
-		timestamp = getCurrentTime();
-	} else {
-		timestamp = timeStamp;
-	}
-};
+)
+	: transactionID(transID), transType(type), amount(amount), timestamp(timeStamp), note(note),
+	  fromAccountID(fromID), toAccountID(toID) {}
 
 // Getters
 string Transaction::getTransactionID() const {
@@ -47,7 +44,7 @@ string Transaction::getToAccountID() const {
 
 // Add transaction to the account's transaction history
 void addTransaction(
-	const string& transactionID,
+	const string& transID,
 	const string& type,
 	double amount,
 	const string& timeStamp,
@@ -56,24 +53,24 @@ void addTransaction(
 	const string& toID
 ) {
 	// Create a new transaction object and add to the account's transaction history
-	Transaction newTransaction(transactionID, type, amount, timeStamp, note, fromID, toID);
+	Transaction newTransaction(transID, type, amount, timeStamp, note, fromID, toID);
 
 	TransactionNode* newNode = new TransactionNode(newTransaction);
 	if (transactionHead == nullptr) {
-        transactionHead = newNode;
-    } else {
-        TransactionNode* temp = transactionHead;
-        while (temp->next) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
+		transactionHead = newNode;
+	} else {
+		TransactionNode* temp = ::transactionHead;
+		while (temp->next) {
+			temp = temp->next;
+		}
+		temp->next = newNode;
+	}
 }
 
 // Display Function
 // Display transaction history for a given fromAccountID
 void displayTransactionHistory(const string& fromID) {
-    TransactionNode* temp = transactionHead;
+	TransactionNode* temp = ::transactionHead;
     cout << "Transaction History for Account: " << fromID << endl;
     while (temp) {
         const Transaction& t = temp->transaction;
@@ -133,8 +130,8 @@ string Transaction::getCurrentTime() const {
 // Note: The getCurrentTime function formats the current time as "YYYY-MM-DD HH:MM:SS".
 
 // Check if a transaction ID already exists
-bool Transaction::isTransactionIDExists(const string& transID) const {
-    TransactionNode* temp = transactionHead;
+bool Transaction::isTransactionIDExists(const string& transID) {
+    TransactionNode* temp = ::transactionHead;
     while (temp) {
         if (temp->transaction.getTransactionID() == transID) {
             return true; // Transaction ID already exists

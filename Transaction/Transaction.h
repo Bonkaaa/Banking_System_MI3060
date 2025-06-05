@@ -37,10 +37,10 @@ class Transaction {
             const string& transID,
             const string& type,
             double amt,
-            const string& timeStamp = "",
-            const string& note = "",
-            const string& fromID = "",
-            const string& toID = ""
+            const string& timeStamp,
+            const string& note,
+            const string& fromID,
+            const string& toID
         );
 
         // Getters
@@ -53,10 +53,11 @@ class Transaction {
         string getToAccountID() const;
 
         // Display Function
-        void displayTransaction() const;
+        static void displayTransactionHistory(const string& fromID);
 
         // Add a transaction to the account's transaction history
-        void addTransaction(
+        static void addTransaction(
+            const string& transID,
             const string& type,
             double amount,
             const string& timeStamp = "",
@@ -65,7 +66,7 @@ class Transaction {
             const string& toID = ""
         );
 
-		bool isTransactionIDExists(const string& transID) const;
+		static bool isTransactionIDExists(const string& transID);
 
 
         // Transaction Functions
