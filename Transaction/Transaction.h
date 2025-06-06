@@ -5,14 +5,6 @@
 #include <iostream>
 using namespace std;
 
-class Transaction;
-
-struct TransactionNode {
-    Transaction transaction;
-    TransactionNode* next;
-    TransactionNode(const Transaction& trans) : transaction(trans), next(nullptr) {}
-};
-
 class Transaction {
     private:
         string transactionID;
@@ -29,7 +21,6 @@ class Transaction {
         string fromAccountID; // For transfer transactions
         string toAccountID; // For transfer transactions
 
-        TransactionNode* transactionHead; // Pointer to the head of the linked list
 
     public:
         // Constructor
@@ -66,8 +57,14 @@ class Transaction {
             const string& toID = ""
         );
 
+        // Clear the list of transactions
+        static void clearTransactionList();
+
+        // Check if a transaction ID exists
 		static bool isTransactionIDExists(const string& transID);
 
+        // Load transactions from a file (not implemented here, but can be added later)
+        static void loadTransactionsFromFile(const string& filename);
 
         // Transaction Functions
         static Transaction deposit(
@@ -94,5 +91,14 @@ class Transaction {
         );
 
 };
+
+struct TransactionNode {
+    Transaction transaction;
+    TransactionNode* next;
+    TransactionNode(const Transaction& trans) : transaction(trans), next(nullptr) {}
+};
+
+extern TransactionNode* transactionHead; // Global variable to hold the head of the transaction linked list
+
 
 #endif // TRANSACTION_H

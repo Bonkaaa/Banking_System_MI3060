@@ -2,6 +2,10 @@
 #include "..\Account\Account.h"
 #include <iostream>
 #include <limits>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <string>
 using namespace std;
 
 Bank::Bank() {}
@@ -12,19 +16,28 @@ void Bank::createAccount() {
     string id, name, pin;
     double initialBalance;
 
-    cout << "Enter Account ID: ";
+    cout << "Nhap ID tai khoan: ";
     cin >> id;
-    cout << "Enter Owner Name: ";
+    cout << "Nhap ten chu tai khoan: ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear newline from previous input
     getline(cin, name);
-    cout << "Enter PIN: ";
+    cout << "Nhap ma PIN (4 chu so): ";
     cin >> pin;
-    cout << "Enter Initial Balance: ";
+    cout << "Nhap so du khoi tao: ";
     cin >> initialBalance;
 
     Account newAccount(id, name, pin, initialBalance);
     accountList.push_back(newAccount);
-    cout << "Account created successfully.\n";
+    cout << "Tai khoan duoc khoi tao thanh cong.\n";
+
+    // Save to file 
+    ofstream fout("accounts.txt", ios::app);
+    if (fout.is_open()) {
+        fout << id << "," << name << "," << pin << "," << initialBalance << ",active\n";
+        fout.close();
+    } else {
+        cout << "Error opening file to save account.\n";
+    }
 }
 
 // Find account by ID, returns pointer to Account or nullptr if not found
@@ -65,6 +78,34 @@ const vector<Account>& Bank::getAccountList() const {
     return accountList;
 }
 
-int main() {
-    return 0; // Placeholder for main function, can be expanded for testing or user interaction
+// Load accounts from a file
+void Bank::loadAccountsFromFile(const string& filename) {
+    ifstream fin(filename);
+    if (!fin.is_open()) {
+        cout << "Error opening file to load accounts.\n";
+        return;
+    }
+
+    string line;
+    while (getline(fin, line)) {
+        // Split the line by commas
+        stringstream ss(line);
+        string id, name, pin, balanceStr, status;
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, pin, ',');
+        getline(ss, balanceStr, ',');
+        getline(ss, status);
+
+        double balance = stod(balanceStr);
+        Account newAccount(id, name, pin, balance);
+        if (status == "active") {
+            newAccount.unlockAccount();
+        } else {
+            newAccount.lockAccount();
+        }
+        
+        accountList.push_back(newAccount);
+    }
+    fin.close();
 }

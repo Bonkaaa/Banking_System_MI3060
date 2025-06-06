@@ -30,6 +30,9 @@ class Bank {
 
         // (Optional) Getter for account list, if needed
         const vector<Account>& getAccountList() const;
+
+        // Load accounts from file
+        void loadAccountsFromFile(const string& filename);
 };
 
 #endif // BANK_H

@@ -18,9 +18,10 @@ class Menu {
         // Display the main menu and handle user input
         static int MainMenu();
         // Main menu function
-        void Login();
+        static string Login();
+        static int loginAdmin();
         void CreateAccount();
-        void Exit();
+        static void Exit();
 
         // Display the admin menu and handle user input
         static int AdminMenu(const string& adminName);
@@ -28,7 +29,6 @@ class Menu {
         void ViewAllAccounts();
         void SearchAccount();
         void LockUnlockAccount();
-        void LogoutAdmin();
 
         // Display the user menu for whose account is logged in
         static int UserMenu(const Account& account);
@@ -36,7 +36,6 @@ class Menu {
         void ViewAccountInfo(const Account& account);
         void ChangePin(const Account& account);
         void ViewTransactionsHistory(const Account& account);
-        void LogoutUser(const Account& account);
 
         // Display transaction menu
         static int TransactionMenu(const Account& account);
@@ -44,9 +43,6 @@ class Menu {
         void Deposit(const Account& account);
         void Withdraw(const Account& account);
         void Transfer(const Account& account);
-        void BackToUserMenu(const Account& account);
 
-        // Exit the application
-        static void Exit();
 };
 #endif // MENU_H

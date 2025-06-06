@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include <iomanip>
+#include <fstream>
 using namespace std;
 
 TransactionNode* transactionHead = nullptr; // Initialize the head of the linked list
@@ -64,6 +65,16 @@ void addTransaction(
 			temp = temp->next;
 		}
 		temp->next = newNode;
+	}
+
+	// Save the transaction to a file
+	ofstream fout("transactions.txt", ios::app);
+	if (fout.is_open()) {
+		fout << transID << "," << type << "," << amount << "," << timeStamp << "," 
+			 << note << "," << fromID << "," << toID << endl;
+		fout.close();
+	} else {
+		cout << "Error opening file to save transaction.\n";
 	}
 }
 
@@ -139,4 +150,56 @@ bool Transaction::isTransactionIDExists(const string& transID) {
         temp = temp->next;
     }
     return false; // Transaction ID does not exist
+}
+
+// Clear the list of transactions
+void Transaction::clearTransactionList() {
+	TransactionNode* current = ::transactionHead;
+	while (current) {
+		TransactionNode* toDelete = current;
+		current = current->next;
+		delete toDelete; // Free memory
+	}
+	::transactionHead = nullptr; // Reset the head pointer
+}
+
+// Load transactions from a file
+void Transaction::loadTransactionsFromFile(const string& filename) {
+    ifstream fin(filename);
+    if (!fin.is_open()) {
+        cout << "Error opening file to load transactions.\n";
+        return;
+    }
+
+    clearTransactionList(); // Clear current list before loading
+
+    string line;
+    while (getline(fin, line)) {
+        // Split the line by commas
+        stringstream ss(line);
+        string transID, type, amountStr, timeStamp, note, fromID, toID;
+
+        getline(ss, transID, ',');
+        getline(ss, type, ',');
+        getline(ss, amountStr, ',');
+        getline(ss, timeStamp, ',');
+        getline(ss, note, ',');
+        getline(ss, fromID, ',');
+        getline(ss, toID, '\n');
+
+        double amount = stod(amountStr);
+
+        Transaction newTransaction(transID, type, amount, timeStamp, note, fromID, toID);
+
+        // Add to linked list
+        TransactionNode* newNode = new TransactionNode(newTransaction);
+        if (transactionHead == nullptr) {
+            transactionHead = newNode;
+        } else {
+            TransactionNode* temp = transactionHead;
+            while (temp->next) temp = temp->next;
+            temp->next = newNode;
+        }
+    }
+    fin.close();
 }

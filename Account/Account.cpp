@@ -21,7 +21,7 @@ double Account::getBalance() const {
 }
 
 bool Account::isActive() const {
-    return status == "active";
+    return status == "Hoat dong";
 }
 
 // PIN Management
@@ -35,11 +35,11 @@ void Account::changePin(const string& newPIN) {
 
 // Lock/Unlock Account
 void Account::lockAccount() {
-    status = "inactive";
+    status = "Khoa";
 }  
 
 void Account::unlockAccount() {
-    status = "active";
+    status = "Hoat dong";
 }
 
 // Transaction Management
