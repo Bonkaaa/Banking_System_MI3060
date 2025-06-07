@@ -15,9 +15,6 @@ class Transaction {
         string timestamp; // Format: YYYY-MM-DD HH:MM:SS
         string note;
 
-        // Helper function to get the current time in the required format
-        string getCurrentTime() const;
-
         string fromAccountID; // For transfer transactions
         string toAccountID; // For transfer transactions
 
@@ -90,6 +87,8 @@ class Transaction {
             const string& note = ""
         );
 
+        // Get current time in the format YYYY-MM-DD HH:MM:SS
+        static string getCurrentTime();
 };
 
 struct TransactionNode {

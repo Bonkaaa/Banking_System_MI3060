@@ -1,3 +1,3 @@
 "C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\BankingSystem.dir/objects.a
-C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\BankingSystem.dir/objects.a @CMakeFiles\BankingSystem.dir\objects1.rsp
-C:\msys64\ucrt64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\BankingSystem.dir/objects.a -Wl,--no-whole-archive -o BankingSystem.exe -Wl,--out-implib,libBankingSystem.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\BankingSystem.dir\linkLibs.rsp
+C:\PROGRA~2\Dev-Cpp\MinGW64\bin\ar.exe qc CMakeFiles\BankingSystem.dir/objects.a @CMakeFiles\BankingSystem.dir\objects1.rsp
+C:\PROGRA~2\Dev-Cpp\MinGW64\bin\C__~1.EXE -Wl,--whole-archive CMakeFiles\BankingSystem.dir/objects.a -Wl,--no-whole-archive -o BankingSystem.exe -Wl,--out-implib,libBankingSystem.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\BankingSystem.dir\linkLibs.rsp

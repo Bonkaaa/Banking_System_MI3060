@@ -8,11 +8,10 @@ using namespace std;
 
 int main() {
     // Initialize the bank
-    Bank bank;
     Menu menu;
 
     // Load accounts from file (if needed)
-    bank.loadAccountsFromFile("accounts.txt");
+    Menu::bank.loadAccountsFromFile("accounts.txt");
     // Load transactions from file (if needed)
     Transaction::loadTransactionsFromFile("transactions.txt");
 
@@ -34,7 +33,7 @@ int main() {
         switch (choice) {
             case 0: // Dang nhap
                 accountID = menu.Login();
-                account = bank.findAccountByID(accountID);
+                account = Menu::bank.findAccountByID(accountID);
                 if (account) {
                     // User logged in, show user menu
                     userLoginStatus = 1; // User logged in
@@ -97,10 +96,11 @@ int main() {
                 }
                 break;
             case 2: // Tao tai khoan
-                bank.createAccount();
+                Menu::bank.createAccount();
                 break;
             case 3: // Thoat
                 cout << "Cam on ban da su dung chuong trinh!" << endl;
+                Transaction::clearTransactionList(); // Clear transactions before exiting
                 return 0;
             default:
                 cout << "Lua chon khong hop le. Vui long chon lai." << endl;

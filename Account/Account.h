@@ -20,8 +20,6 @@ class Account {
         Account(const string& id, const string& name, const string& p, double initialBalance)
             : accountID(id), ownerName(name), balance(initialBalance), pin(p), status("active") {}
 
-        ~Account();
-
         // Getters
         string getID() const;
         string getOwnerName() const;
@@ -30,11 +28,13 @@ class Account {
 
         // PIN Management
         bool verifyPin(const string& inputPIN) const;
-        void changePin(const string& newPIN);
+        void changePin(string& newPIN);
 
         // Lock/Unlock Account
         void lockAccount();
         void unlockAccount();
 
+        // Set balance
+        void setBalance(double newBalance);
 };
 #endif

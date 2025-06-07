@@ -1,4 +1,6 @@
 #include "Transaction.h"
+#include "../Account/Account.h"
+#include "../Bank/Bank.h"
 #include <iostream>
 #include <ctime>
 #include <iomanip>
@@ -6,6 +8,8 @@
 using namespace std;
 
 TransactionNode* transactionHead = nullptr; // Initialize the head of the linked list
+Account* currentAccount = nullptr; // Pointer to the currently logged-in account
+Bank bank; // Assuming you have a Bank instance
 
 // Constructor with parameters
 Transaction::Transaction(
@@ -44,7 +48,7 @@ string Transaction::getToAccountID() const {
 }
 
 // Add transaction to the account's transaction history
-void addTransaction(
+void Transaction::addTransaction(
 	const string& transID,
 	const string& type,
 	double amount,
@@ -80,7 +84,7 @@ void addTransaction(
 
 // Display Function
 // Display transaction history for a given fromAccountID
-void displayTransactionHistory(const string& fromID) {
+void Transaction::displayTransactionHistory(const string& fromID) {
 	TransactionNode* temp = ::transactionHead;
     cout << "Transaction History for Account: " << fromID << endl;
     while (temp) {
@@ -106,6 +110,14 @@ Transaction Transaction::deposit(
 	const string& timeStamp,
 	const string& note
 ) {
+	// Find the account by fromAccountID and increase its balance
+	Account* account = bank.findAccountByID(fromAccountID);
+	if (account) {
+		account->setBalance(account->getBalance() + amount);
+	}
+	cout << "Deposit successful to account " << fromAccountID
+		 << ". Amount: " << amount << endl;
+	// Return the deposit transaction object
 	return Transaction(transID, "deposit", amount, timeStamp, note, fromAccountID, "");
 }
 
@@ -116,7 +128,20 @@ Transaction Transaction::withdraw(
 	const string& timeStamp,
 	const string& note
 ) {
-	return Transaction(transID, "withdraw", amount, timeStamp, note, fromAccountID, "");
+	// Find the account by fromAccountID and decrease its balance
+	Account* account = bank.findAccountByID(fromAccountID);
+	if (account) {
+		if (account->getBalance() >= amount) {
+			account->setBalance(account->getBalance() - amount);
+		} else {
+			cout << "Insufficient balance for withdrawal.\n";
+			return Transaction(transID, "withdrawal", 0, timeStamp, note, fromAccountID, "");
+		}
+	}
+	cout << "Withdrawal successful from account " << fromAccountID
+		 << ". Amount: " << amount << endl;
+	// Return the withdrawal transaction object
+	return Transaction(transID, "withdrawal", amount, timeStamp, note, fromAccountID, "");
 }
 
 Transaction Transaction::transfer(
@@ -127,11 +152,27 @@ Transaction Transaction::transfer(
 	const string& timeStamp,
 	const string& note
 ) {
-	return Transaction(transID, "transfer", amount, timeStamp, note, fromAccountID, toAccountID);
+	// Find the fromAccount and toAccount
+	Account* fromAccount = bank.findAccountByID(fromAccountID);
+	Account* toAccount = bank.findAccountByID(toAccountID);
+
+	if (fromAccount && toAccount) {
+		if (fromAccount->getBalance() >= amount) {
+			fromAccount->setBalance(fromAccount->getBalance() - amount);
+			toAccount->setBalance(toAccount->getBalance() + amount);
+		} else {
+			cout << "Insufficient balance for transfer.\n";
+		}
+		return Transaction(transID, "transfer", amount, timeStamp, note, fromAccountID, toAccountID);
+		cout << "Transfer successful from " << fromAccountID << " to " << toAccountID
+			 << ". Amount: " << amount << endl;
+	} else {
+		cout << "One or both accounts not found for transfer.\n";
+	}
 }
 
 // Helper function to get the current time in the required format
-string Transaction::getCurrentTime() const {
+string Transaction::getCurrentTime() {
 	time_t now = time(0);
 	tm* localtm = localtime(&now);
 	char buffer[20];

@@ -4,9 +4,6 @@
 using namespace std;
 
 
-Account::~Account() {
-}  
-
 // Getters
 string Account::getID() const {
     return accountID;
@@ -29,7 +26,7 @@ bool Account::verifyPin(const string& inputPIN) const {
     return pin == inputPIN;
 }
 
-void Account::changePin(const string& newPIN) {
+void Account::changePin(string& newPIN) {
     pin = newPIN;
 }
 
@@ -42,3 +39,7 @@ void Account::unlockAccount() {
     status = "Hoat dong";
 }
 
+void Account::setBalance(double newBalance) {
+    assert(newBalance >= 0); // Ensure balance cannot be negative
+    balance = newBalance;
+}

@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"C:/dsa/Banking_System_MI3060/build/cmake_install.cmake"
+		"D:/Banking_System_MI3060/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

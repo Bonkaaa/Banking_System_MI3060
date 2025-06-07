@@ -20,29 +20,31 @@ class Menu {
         // Main menu function
         static string Login();
         static int loginAdmin();
-        void CreateAccount();
+        static void CreateAccount();
         static void Exit();
 
         // Display the admin menu and handle user input
         static int AdminMenu(const string& adminName);
         // Admin menu function
-        void ViewAllAccounts();
-        void SearchAccount();
-        void LockUnlockAccount();
+        static void ViewAllAccounts();
+        static void SearchAccount();
+        static void LockUnlockAccount();
 
         // Display the user menu for whose account is logged in
         static int UserMenu(const Account& account);
         // User menu function
-        void ViewAccountInfo(const Account& account);
-        void ChangePin(const Account& account);
-        void ViewTransactionsHistory(const Account& account);
+        static void ViewAccountInfo(const Account& account);
+        static void ChangePin(Account& account);
+        static void ViewTransactionsHistory(const Account& account);
 
         // Display transaction menu
         static int TransactionMenu(const Account& account);
         // Transaction menu function
-        void Deposit(const Account& account);
-        void Withdraw(const Account& account);
-        void Transfer(const Account& account);
+        static void Deposit(Account& account);
+        static void Withdraw(Account& account);
+        static void Transfer(Account& account);
+
+        static Bank bank; // Assuming you have a Bank instance
 
 };
 #endif // MENU_H

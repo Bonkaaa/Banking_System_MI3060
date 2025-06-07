@@ -8,6 +8,8 @@
 
 using namespace std;
 
+Bank Menu::bank; // Initialize the static Bank instance
+
 int Menu::ShowArrowMenu(const vector<string>& options, const string& title) {
     int selected = 0;
     int key;
@@ -100,7 +102,6 @@ string Menu::Login() {
     cout << "Nhap ma PIN: ";
     cin >> pin;
 
-    Bank bank; // Assuming you have a Bank instance
     Account* account = bank.findAccountByID(accountID);
 
     if (account && account->verifyPin(pin)) {
@@ -132,18 +133,16 @@ int Menu::loginAdmin() {
 
 // Create Account function
 void Menu::CreateAccount() {
-    Bank bank; // Assuming you have a Bank instance
     bank.createAccount();
 }
 
 // User Menu Functions
-void ViewAccountInfo(const Account& account) {
-    Bank bank; // Assuming you have a Bank instance
+void Menu::ViewAccountInfo(const Account& account) {
     cout << "Thong tin tai khoan:" << endl;
 	bank.showAccountInfo(account.getID());
 }
 
-void ChangePin(Account& account) {
+void Menu::ChangePin(Account& account) {
     string newPin;
     cout << "Nhap ma PIN moi: ";
     cin >> newPin;
@@ -151,29 +150,26 @@ void ChangePin(Account& account) {
     cout << "Ma PIN da duoc thay doi thanh cong!" << endl;
 }
 
-void ViewTransactionsHistory(const Account& account) {
+void Menu::ViewTransactionsHistory(const Account& account) {
     cout << "Lich su giao dich:" << endl;
     // Assuming Transaction class has a static method to display transaction history
     Transaction::displayTransactionHistory(account.getID());
 }
 
 // Admin Menu Functions
-void ViewAllAccounts() {
-    Bank bank; // Assuming you have a Bank instance
+void Menu::ViewAllAccounts() {
     cout << "Danh sach tat ca tai khoan:" << endl;
     bank.showAllAccounts();
 }
 
-void SearchAccount() {
-    Bank bank; // Assuming you have a Bank instance
+void Menu::SearchAccount() {
     string id;
     cout << "Nhap ID tai khoan can tim: ";
     cin >> id;
     bank.showAccountInfo(id);
 }
 
-void LockUnlockAccount() {
-    Bank bank; // Assuming you have a Bank instance
+void Menu::LockUnlockAccount() {
     string id;
     cout << "Nhap ID tai khoan can khoa/mo: ";
     cin >> id;
@@ -192,16 +188,9 @@ void LockUnlockAccount() {
 }
 
 // Transaction Menu Functions
-void Deposit(const Account& account) {
+void Menu::Deposit(Account& account) {
     double amount;
 	cout << "Nhap so tien nap: ";
-    cin >> amount;
-
-    if (amount <= 0) {
-        cout << "So tien nap phai lon hon 0!" << endl;
-        return;
-    }
-    cout << "Nhap so tien nap: ";
     cin >> amount;
 
     if (amount <= 0) {
@@ -217,14 +206,18 @@ void Deposit(const Account& account) {
 		// Randomly generate a transaction ID for simplicity
 		string transID;
 		do {
-			transID	 = "trans" + to_string(rand() % 10000); // Random transaction ID
+			transID	 = "trans" + to_string(rand() % 100000); // Random transaction ID
 		} while (Transaction::isTransactionIDExists(transID));
-        Transaction newTransaction = Transaction::deposit(transID, account.getID(), amount);
+
+        // Get current timestamp
+        string timestamp = Transaction::getCurrentTime();
+
+        Transaction newTransaction = Transaction::deposit(transID, account.getID(), amount, timestamp, note);
         Transaction::addTransaction(transID, "deposit", amount, newTransaction.getTimestamp(), note, account.getID(), "");
     }
 }
 
-void Withdraw(const Account& account) {
+void Menu::Withdraw(Account& account) {
     double amount;
     cout << "Nhap so tien rut: ";
     cin >> amount;
@@ -241,14 +234,15 @@ void Withdraw(const Account& account) {
         // Randomly generate a transaction ID for simplicity
         string transID;
         do {
-            transID = "trans" + to_string(rand() % 10000); // Random transaction ID
+            transID = "trans" + to_string(rand() % 100000); // Random transaction ID
         } while (Transaction::isTransactionIDExists(transID));
-        Transaction newTransaction = Transaction::withdraw(transID, account.getID(), amount);
+        string timestamp = Transaction::getCurrentTime();
+        Transaction newTransaction = Transaction::withdraw(transID, account.getID(), amount, timestamp, note);
         Transaction::addTransaction(transID, "withdraw", amount, newTransaction.getTimestamp(), note, account.getID(), "");
     }
 }
 
-void Transfer(const Account& account) {
+void Menu::Transfer(Account& account) {
     string toAccountID;
     double amount;
     cout << "Nhap ID tai khoan nhan: ";
@@ -261,7 +255,6 @@ void Transfer(const Account& account) {
         return;
     }
 
-    Bank bank; // Assuming you have a Bank instance
     Account* toAccount = bank.findAccountByID(toAccountID);
     if (!toAccount) {
         cout << "Khong tim thay tai khoan voi ID: " << toAccountID << endl;
@@ -276,9 +269,10 @@ void Transfer(const Account& account) {
     // Randomly generate a transaction ID for simplicity
     string transID;
     do {
-        transID = "trans" + to_string(rand() % 10000); // Random transaction ID
+        transID = "trans" + to_string(rand() % 100000); // Random transaction ID
     } while (Transaction::isTransactionIDExists(transID));
-    Transaction newTransaction = Transaction::transfer(transID, account.getID(), toAccountID, amount);
+    string timestamp = Transaction::getCurrentTime();
+    Transaction newTransaction = Transaction::transfer(transID, account.getID(), toAccountID, amount, timestamp, note);
     Transaction::addTransaction(transID, "transfer", amount, newTransaction.getTimestamp(), note, account.getID(), toAccountID);
     cout << "Chuyen khoan thanh cong!" << endl;
 }
