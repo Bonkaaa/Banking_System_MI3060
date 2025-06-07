@@ -17,12 +17,13 @@ class Account {
 
     public:
         // Constructor and Destructor
-        Account(const string& id, const string& name, const string& p, double initialBalance)
-            : accountID(id), ownerName(name), balance(initialBalance), pin(p), status("active") {}
+        Account(const string& id, const string& name, const string& p, double initialBalance, const string& status)
+            : accountID(id), ownerName(name), pin(p), balance(initialBalance), status(status) {}
 
         // Getters
         string getID() const;
         string getOwnerName() const;
+        string getPin() const;
         double getBalance() const;
         bool isActive() const;
 

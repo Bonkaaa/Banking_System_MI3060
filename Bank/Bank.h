@@ -33,6 +33,9 @@ class Bank {
 
         // Load accounts from file
         void loadAccountsFromFile(const string& filename);
+
+        // Save accounts to file 
+        void saveAccountsToFile(const string& filename);
 };
 
 #endif // BANK_H

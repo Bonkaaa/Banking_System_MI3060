@@ -63,6 +63,9 @@ class Transaction {
         // Load transactions from a file (not implemented here, but can be added later)
         static void loadTransactionsFromFile(const string& filename);
 
+        // Save transactions to a file
+        static void saveTransactionsToFile(const string& filename);
+
         // Transaction Functions
         static Transaction deposit(
             const string& transID,

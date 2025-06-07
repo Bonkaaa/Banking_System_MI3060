@@ -56,10 +56,10 @@ RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Banking_System_MI3060
+CMAKE_SOURCE_DIR = C:\dsa\Banking_System_MI3060
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Banking_System_MI3060\build
+CMAKE_BINARY_DIR = C:\dsa\Banking_System_MI3060\build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -87,14 +87,14 @@ clean: CMakeFiles/BankingSystem.dir/clean
 CMakeFiles/BankingSystem.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BankingSystem.dir\build.make CMakeFiles/BankingSystem.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BankingSystem.dir\build.make CMakeFiles/BankingSystem.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Banking_System_MI3060\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Built target BankingSystem"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\dsa\Banking_System_MI3060\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Built target BankingSystem"
 .PHONY : CMakeFiles/BankingSystem.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/BankingSystem.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Banking_System_MI3060\build\CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\dsa\Banking_System_MI3060\build\CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/BankingSystem.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\Banking_System_MI3060\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\dsa\Banking_System_MI3060\build\CMakeFiles 0
 .PHONY : CMakeFiles/BankingSystem.dir/rule
 
 # Convenience name for target.
@@ -104,7 +104,7 @@ BankingSystem: CMakeFiles/BankingSystem.dir/rule
 # codegen rule for target.
 CMakeFiles/BankingSystem.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BankingSystem.dir\build.make CMakeFiles/BankingSystem.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\Banking_System_MI3060\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Finished codegen for target BankingSystem"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\dsa\Banking_System_MI3060\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Finished codegen for target BankingSystem"
 .PHONY : CMakeFiles/BankingSystem.dir/codegen
 
 # clean rule for target.

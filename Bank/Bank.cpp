@@ -26,7 +26,7 @@ void Bank::createAccount() {
     cout << "Nhap so du khoi tao: ";
     cin >> initialBalance;
 
-    Account newAccount(id, name, pin, initialBalance);
+    Account newAccount(id, name, pin, initialBalance, "active");
     accountList.push_back(newAccount);
     cout << "Tai khoan duoc khoi tao thanh cong.\n";
 
@@ -36,7 +36,7 @@ void Bank::createAccount() {
         fout << id << "," << name << "," << pin << "," << initialBalance << ",active\n";
         fout.close();
     } else {
-        cout << "Error opening file to save account.\n";
+        cout << "Gap loi khi moi file\n";
     }
 }
 
@@ -55,10 +55,10 @@ Account* Bank::findAccountByID(const string& id) {
 void Bank::showAccountInfo(const string& id) {
     for (const auto& account : accountList) {
         if (account.getID() == id) {
-            cout << "Account ID: " << account.getID() << endl;
-            cout << "Owner Name: " << account.getOwnerName() << endl;
-            cout << "Balance: " << account.getBalance() << endl;
-            cout << "Status: " << (account.isActive() ? "Active" : "Inactive") << endl;
+            cout << "ID tai khoan: " << account.getID() << endl;
+            cout << "Ten chu tai khoan: " << account.getOwnerName() << endl;
+            cout << "So du: " << account.getBalance() << endl;
+            cout << "Trang thai: " << (account.isActive() ? "Hoat dong" : "Bi khoa") << endl;
             cout << "--------------------------------\n";
             return;
         }
@@ -71,8 +71,8 @@ void Bank::showAllAccounts() {
     cout << "All Accounts:\n";
     for (const auto& account : accountList) {
         cout << "--------------------------------\n";
-        cout << "Account ID: " << account.getID() << ", Owner Name: " << account.getOwnerName()
-             << ", Balance: " << account.getBalance() << ", Status: " << (account.isActive() ? "Active" : "Inactive") << endl;
+        cout << "ID tai khoan: " << account.getID() << ", Ten chu tai khoan: " << account.getOwnerName()
+             << ", So du: " << account.getBalance() << ", Trang thai: " << (account.isActive() ? "Hoat dong" : "Bi khoa") << endl;
     }
     cout << "--------------------------------\n";
 }
@@ -85,7 +85,7 @@ const vector<Account>& Bank::getAccountList() const {
 void Bank::loadAccountsFromFile(const string& filename) {
     ifstream fin(filename);
     if (!fin.is_open()) {
-        cout << "Error opening file to load accounts.\n";
+        cout << "Gap loi khi mo file\n";
         return;
     }
 
@@ -101,14 +101,23 @@ void Bank::loadAccountsFromFile(const string& filename) {
         getline(ss, status);
 
         double balance = stod(balanceStr);
-        Account newAccount(id, name, pin, balance);
-        if (status == "active") {
-            newAccount.unlockAccount();
-        } else {
-            newAccount.lockAccount();
-        }
-        
+        Account newAccount(id, name, pin, balance, status);
         accountList.push_back(newAccount);
     }
     fin.close();
+}
+
+void Bank::saveAccountsToFile(const string& filename) {
+    ofstream fout(filename);
+    if (!fout.is_open()) {
+        cout << "Gap loi khi mo file de luu tai khoan\n";
+        return;
+    }
+
+    for (const auto& account : accountList) {
+        fout << account.getID() << "," << account.getOwnerName() << "," 
+             << account.getPin() << "," << account.getBalance() << "," 
+             << (account.isActive() ? "Hoat dong" : "Bi khoa") << "\n";
+    }
+    fout.close();
 }

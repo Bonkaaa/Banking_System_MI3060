@@ -244,3 +244,26 @@ void Transaction::loadTransactionsFromFile(const string& filename) {
     }
     fin.close();
 }
+
+// Save transactions to a file
+void Transaction::saveTransactionsToFile(const string& filename) {
+	ofstream fout(filename);
+	if (!fout.is_open()) {
+		cout << "Error opening file to save transactions.\n";
+		return;
+	}
+
+	TransactionNode* temp = ::transactionHead;
+	while (temp) {
+		const Transaction& t = temp->transaction;
+		fout << t.getTransactionID() << "," 
+			 << t.getType() << "," 
+			 << t.getAmount() << "," 
+			 << t.getTimestamp() << "," 
+			 << t.getNote() << "," 
+			 << t.getFromAccountID() << "," 
+			 << t.getToAccountID() << endl;
+		temp = temp->next;
+	}
+	fout.close();
+}

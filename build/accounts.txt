@@ -1,2 +1,1 @@
-123,Kien,000,10000,active
 123456,Kien,0000,10,active

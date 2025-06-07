@@ -26,7 +26,7 @@ int Menu::ShowArrowMenu(const vector<string>& options, const string& title) {
                 cout << "  " << options[i] << endl;
             }
         }
-
+        cout << "-------------------" << endl;
         int ch = _getch();
         if (ch == 224) { // phím đặc biệt
             ch = _getch();
@@ -68,9 +68,9 @@ int Menu::AdminMenu(const string& adminName) {
 int Menu::UserMenu(const Account& account) {
     vector<string> options = {
         "Xem thong tin tai khoan",
-        "Thuc hien giao dich",
-        "Xem lich su giao dich",
         "Doi ma PIN",
+        "Xem lich su giao dich",
+        "Thuc hien giao dich",
         "Dang xuat"
     };
     return ShowArrowMenu(options, "========= Menu Nguoi Dung: " + account.getOwnerName() + " =========");
@@ -134,6 +134,7 @@ int Menu::loginAdmin() {
 // Create Account function
 void Menu::CreateAccount() {
     bank.createAccount();
+    cout << "Tai khoan da duoc tao thanh cong!" << endl;
 }
 
 // User Menu Functions
