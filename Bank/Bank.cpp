@@ -47,6 +47,7 @@ Account* Bank::findAccountByID(const string& id) {
 			return &account;
             }
         }
+    cout << "Khong tim thay tai khoan voi ID: " << id << endl;
     return nullptr; // Not found
 }
 
@@ -62,6 +63,8 @@ void Bank::showAccountInfo(const string& id) {
             return;
         }
     }
+    cout << "Khong tim thay tai khoan voi ID: " << id << endl;
+    cout << "--------------------------------\n";
 }
 
 void Bank::showAllAccounts() {
