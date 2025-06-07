@@ -3,6 +3,9 @@ project(BankingSystem)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+
 # Add all source files
 set(SOURCES
     main.cpp
