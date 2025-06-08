@@ -180,7 +180,7 @@ void Transaction::clearTransactionList() {
 void Transaction::loadTransactionsFromFile(const string& filename) {
     ifstream fin(filename);
     if (!fin.is_open()) {
-        cout << "Gap loi khi load file\n";
+        cout << "Gặp lỗi khi load file\n";
         return;
     }
 
@@ -221,7 +221,7 @@ void Transaction::loadTransactionsFromFile(const string& filename) {
 void Transaction::saveTransactionsToFile(const string& filename) {
 	ofstream fout(filename);
 	if (!fout.is_open()) {
-		cout << "Gap loi khi mo file\n";
+		cout << "Gặp lỗi khi lưu vào file\n";
 		return;
 	}
 

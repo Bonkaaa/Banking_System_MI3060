@@ -13,10 +13,8 @@ using namespace std;
 class Menu {
     public:
         // Show arrow menu
-        static int ShowArrowMenu(const vector<string>& options, const string& title = "Menu");
+        static int ShowArrowMenu(const vector<string>& options, const string& title);
 
-        // Display the main menu and handle user input
-        static int MainMenu();
         // Main menu function
         static string Login();
         static int loginAdmin();

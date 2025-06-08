@@ -20,16 +20,16 @@ int main() {
     int adminStatus = 0; // 0: Not logged in, 1: Admin logged in
 
     vector<string> mainMenuOptions = {
-        "Dang nhap",
-        "Dang nhap admin",
-        "Tao tai khoan",
-        "Thoat"
+        "Đăng nhập",
+        "Đăng nhập admin",
+        "Tạo tài khoản",
+        "Thoát"
     };
     while (true) {
         // Main menu loop
         string accountID;
         Account* account = nullptr;
-        int choice = Menu::ShowArrowMenu(mainMenuOptions, "Main Menu");
+        int choice = Menu::ShowArrowMenu(mainMenuOptions, "Menu chương trình");
         switch (choice) {
             case 0: // Dang nhap
                 accountID = menu.Login();
@@ -43,17 +43,17 @@ int main() {
                         switch (userMenuChoice) {
                             case 0: // View account info
                                 menu.ViewAccountInfo(*account);
-                                cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                 getch();
                                 break;
                             case 1: // Change PIN
                                 menu.ChangePin(*account);
-                                cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                 getch();
                                 break;
                             case 2: // View transaction history
                                 menu.ViewTransactionsHistory(*account);
-                                cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                 getch();
                                 break;
                             case 3: // Transaction menu
@@ -70,21 +70,21 @@ int main() {
                                 switch (transactionChoice) {
                                     case 0: // Deposit
                                         menu.Deposit(*account);
-                                        cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                        cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                         getch();
                                         break;
                                     case 1: // Withdraw
                                         menu.Withdraw(*account);
-                                        cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                        cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                         getch();
                                         break;
                                     case 2: // Transfer
                                         menu.Transfer(*account);
-                                        cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                        cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                         getch();
                                         break;
                                     default:
-                                        cout << "Lua chon khong hop le." << endl;
+                                        cout << "Lựa chọn không hợp lệ. Vui lòng thử lại." << endl;
                                         break;
                                 }
                                 break;
@@ -94,16 +94,16 @@ int main() {
                                 stayInUserMenu = false;
                                 userLoginStatus = 0; // Reset user login status
                                 account = nullptr; // Clear account pointer
-                                cout << "Da dang xuat khoi tai khoan." << endl;
-                                cout << "Nhan phim bat ky de ve menu chinh..." << endl;
+                                cout << "Đã đăng xuất khỏi tài khoản người dùng." << endl;
+                                cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                 getch();
                                 break;
                         }
                     }
                 } else {
-                    cout << "Dang nhap that bai. Vui long thu lai." << endl;
+                    cout << "Đăng nhập thất bại. Tài khoản không tồn tại hoặc sai mã PIN." << endl;
                     userLoginStatus = 0; // Reset user login status
-                    cout << "Nhan phim bat ky de ve menu chinh..." << endl;
+                    cout << "Nhấn phím bất kỳ để về menu chính..." << endl;
                     getch();
                 }
                 break;
@@ -117,38 +117,39 @@ int main() {
                         switch (adminMenuChoice) {
                             case 0: // View all accounts
                                 menu.ViewAllAccounts();
-                                cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                 getch();
                                 break;
                             case 1: // Search account
                                 menu.SearchAccount();
-                                cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                 getch();
                                 break;
                             case 2: // Lock/Unlock account
                                 menu.LockUnlockAccount();
-                                cout << "Nhan phim bat ky de tiep tuc..." << endl;
+                                cout << "Nhấn phím bất kỳ để tiếp tục..." << endl;
                                 getch();
                                 break;
                             case 3: // Logout
                                 stayInAdminMenu = false;
                                 adminStatus = 0; // Reset admin login status
-                                cout << "Da dang xuat khoi tai khoan admin." << endl;
-                                cout << "Nhan phim bat ky de ve menu chinh..." << endl;
+                                cout << "Đã đăng xuất khỏi tài khoản quản trị viên." << endl;
+                                cout << "Nhấn phím bất kỳ để về menu chính..." << endl;
                                 getch();
                                 break;
                         }
                     }
                 } else {
-                    cout << "Dang nhap admin that bai. Vui long thu lai." << endl;
+                    cout << "Đăng nhập quản trị viên thất bại. Vui lòng thử lại." << endl;
                     adminStatus = 0; // Reset admin login status
-                    cout << "Nhan phim bat ky de ve menu chinh..." << endl;
+                    cout << "Nhấn phím bất kỳ để về menu chính..." << endl;
                     getch();
                 }
                 break;
             case 2: // Tao tai khoan
                 menu.CreateAccount();
-                cout << "Nhan phim bat ky de ve menu chinh..." << endl;
+                cout << "Tài khoản đã được tạo thành công!" << endl;
+                cout << "Nhấn phím bất kỳ để về menu chính" << endl;
                 getch();
                 break;
             case 3: // Thoat
@@ -157,7 +158,7 @@ int main() {
                 Transaction::clearTransactionList(); // Clear transaction list
                 Menu::Exit();
             default:
-                cout << "Lua chon khong hop le. Vui long thu lai." << endl;
+                cout << "Lựa chọn không hợp lệ. Vui lòng thử lại." << endl;
                 break;      
         }
     }

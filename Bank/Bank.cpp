@@ -17,35 +17,35 @@ void Bank::createAccount() {
     string id, name, pin;
     double initialBalance;
 
-    cout << "Nhap ID tai khoan (6 chu so): ";
+    cout << "Nhập ID tài khoản (6 chữ số): ";
     while (true) {
         cin >> id;
         if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit)) {
             break; // Valid ID
         } else {
-            cout << "ID khong hop le. Vui long nhap lai (6 chu so): ";
+            cout << "ID tài khoản phải là 6 chữ số. Vui lòng nhập lại: ";
         }
     }
-    cout << "Nhap ten chu tai khoan: ";
+    cout << "Nhập tên chủ tài khoản: ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear newline from previous input
     getline(cin, name);
-    cout << "Nhap ma PIN (4 chu so): ";
+    cout << "Nhập mã PIN (4 chữ số): ";
     while (true) {
         cin >> pin;
         if (pin.length() == 4 && all_of(pin.begin(), pin.end(), ::isdigit)) {
             break; // Valid PIN
         } else {
-            cout << "Ma PIN khong hop le. Vui long nhap lai (4 chu so): ";
+            cout << "Mã PIN phải là 4 chữ số. Vui lòng nhập lại: ";
         }
     }
-    cout << "Nhap so du khoi tao: ";
+    cout << "Nhập số dư khởi tạo: ";
     cin >> initialBalance;
 
-    string status = "Hoat dong"; // Default status for new accounts
+    string status = "Hoạt động"; // Default status for new accounts
 
     Account newAccount(id, name, pin, initialBalance, status);
     accountList.push_back(newAccount);
-    cout << "Tai khoan duoc khoi tao thanh cong.\n";
+    cout << "Tài khoản đã được tạo thành công!" << endl;
 
     // Save to file 
     ofstream fout("accounts.txt", ios::app);
@@ -71,23 +71,23 @@ Account* Bank::findAccountByID(const string& id) {
 void Bank::showAccountInfo(const string& id) {
     for (const auto& account : accountList) {
         if (account.getID() == id) {
-            cout << "ID tai khoan: " << account.getID() << endl;
-            cout << "Ten chu tai khoan: " << account.getOwnerName() << endl;
-            cout << "So du: " << account.getBalance() << endl;
-            cout << "Trang thai: " << (account.isActive() ? "Hoat dong" : "Bi khoa") << endl;
+            cout << "ID tài khoản: " << account.getID() << endl;
+            cout << "Tên chủ tài khoản: " << account.getOwnerName() << endl;
+            cout << "Số dư: " << account.getBalance() << endl;
+            cout << "Trạng thái: " << (account.isActive() ? "Hoạt động" : "Bị khoá") << endl;
             cout << "--------------------------------\n";
             return;
         }
     }
-    cout << "Khong tim thay tai khoan voi ID: " << id << endl;
+    cout << "Không tìm thấy tài khoản: " << id << endl;
     cout << "--------------------------------\n";
 }
 
 void Bank::showAllAccounts() {
     for (const auto& account : accountList) {
         cout << "--------------------------------\n";
-        cout << "ID tai khoan: " << account.getID() << ", Ten chu tai khoan: " << account.getOwnerName()
-             << ", So du: " << account.getBalance() << ", Trang thai: " << (account.isActive() ? "Hoat dong" : "Bi khoa") << endl;
+        cout << "ID tài khoản " << account.getID() << ", Tên chủ tài khoản " << account.getOwnerName()
+             << ", Số dư: " << account.getBalance() << ", Trạng thái: " << (account.isActive() ? "Hoạt động" : "Bị khoá") << endl;
     }
     cout << "--------------------------------\n";
 }
@@ -125,14 +125,14 @@ void Bank::loadAccountsFromFile(const string& filename) {
 void Bank::saveAccountsToFile(const string& filename) {
     ofstream fout(filename);
     if (!fout.is_open()) {
-        cout << "Gap loi khi mo file de luu tai khoan\n";
+        cout << "Gặp lỗi khi mở file\n";
         return;
     }
 
     for (const auto& account : accountList) {
         fout << account.getID() << "," << account.getOwnerName() << "," 
              << account.getPin() << "," << account.getBalance() << "," 
-             << (account.isActive() ? "Hoat dong" : "Bi khoa") << "\n";
+             << (account.isActive() ? "Hoạt động" : "Bị khoá") << "\n";
     }
     fout.close();
 }

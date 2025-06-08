@@ -44,23 +44,13 @@ int Menu::ShowArrowMenu(const vector<string>& options, const string& title) {
     }
 }
 
-// Main Menu
-int Menu::MainMenu() {
-    vector<string> options = {
-        "Dang nhap",
-        "Tao tai khoan",
-        "Thoat"
-    };
-    return ShowArrowMenu(options, "========= Menu Ngan Hang =========");
-}
-
 // Admin Menu
 int Menu::AdminMenu(const string& adminName) {
     vector<string> options = {
-        "Xem danh sach tai khoan",
-        "Tim kiem tai khoan",
-        "Khoa/Mo tai khoan",
-        "Dang xuat"
+        "Xem danh sách tài khoản",
+        "Tìm kiếm tài khoản",
+        "Mở/Khoá tài khoản",
+        "Đăng xuất"
     };
     return ShowArrowMenu(options, "========= Menu Admin: " + adminName + " =========");
 }
@@ -69,51 +59,51 @@ int Menu::AdminMenu(const string& adminName) {
 int Menu::UserMenu(const Account& account) {
     vector<string> options = {
         "Xem thong tin tai khoan",
-        "Doi ma PIN",
-        "Xem lich su giao dich",
-        "Thuc hien giao dich",
-        "Dang xuat"
+        "Đổi mã PIN",
+        "Xem lịch sử giao dịch",
+        "Thực hiện giao dịch",
+        "Đăng xuất"
     };
-    return ShowArrowMenu(options, "========= Menu Nguoi Dung: " + account.getOwnerName() + " =========");
+    return ShowArrowMenu(options, "========= Menu Người Dùng: " + account.getOwnerName() + " =========");
 }
 
 // Transaction Menu
 int Menu::TransactionMenu(const Account& account) {
     vector<string> options = {
-        "Gui tien",
-        "Rut tien",
-        "Chuyen khoan",
-        "Quay lai"
+        "Gửi tiền",
+        "Rút tiền",
+        "Chuyển khoản",
+        "Quay lại"
     };
-    return ShowArrowMenu(options, "========= Menu Giao Dich: " + account.getOwnerName() + " =========");
+    return ShowArrowMenu(options, "========= Menu Giao Dịch: " + account.getOwnerName() + " =========");
 }
 
 // Exit the application
 void Menu::Exit() {
-    cout << "Cam on ban da su dung dich vu cua chung toi!" << endl;
-    cout << "Hen gap lai!" << endl;
     exit(0);
 }
 
 // Login function
 string Menu::Login() {
     string accountID, pin;
-    cout << "Nhap ID tai khoan: ";
+    cout << "Nhập ID tài khoản (6 chữ số): ";
     while (true) {
         cin >> accountID;
-        if (accountID.length() == 6 && all_of(accountID.begin(), accountID.end(), ::isdigit)) {
+        // Check if the account ID is exactly 6 digits long and consists only of digits and is not occupied
+        if (accountID.length() == 6 && all_of(accountID.begin(), accountID.end(), ::isdigit) 
+        && bank.findAccountByID(accountID) == nullptr) {
             break; // Valid ID length
         } else {
-            cout << "ID tai khoan phai la 6 chu so. Vui long nhap lai: ";
+            cout << "ID tài khoản phải là 6 chữ số. Vui lòng nhập lại: ";
         }
     }
-    cout << "Nhap ma PIN: ";
+    cout << "Nhập mã PIN (4 chữ số): ";
     while (true) {
         cin >> pin;
         if (pin.length() == 4 && all_of(pin.begin(), pin.end(), ::isdigit)) {
             break; // Valid PIN length
         } else {
-            cout << "Ma PIN phai la 4 chu so. Vui long nhap lai: ";
+            cout << "Mã PIN phải là 4 chữ số. Vui lòng nhập lại: ";
         }
     }
 
@@ -123,7 +113,7 @@ string Menu::Login() {
         return accountID; // Login successful, return account ID
     }
     else {
-        cout << "ID tai khoan hoac ma PIN khong dung. Vui long thu lai." << endl;
+        cout << "ID tài khoản hoặc mã PIN không đúng. Vui lòng thử lại" << endl;
         return "0"; // Login failed, return "0"
     }
 }
@@ -131,19 +121,19 @@ string Menu::Login() {
 // Admin Login function
 int Menu::loginAdmin() {
     string adminID, adminPin;
-    cout << "Nhap ID quan tri vien: ";
+    cout << "Nhập ID quản trị viên: ";
     cin >> adminID;
-    cout << "Nhap ma PIN: ";
+    cout << "Nhập mã PIN: ";
     cin >> adminPin;
 
     while (adminID != "admin" || adminPin != "admin123") {
-        cout << "ID quan tri vien hoac ma PIN khong dung. Vui long thu lai." << endl;
-        cout << "Nhap ID quan tri vien: ";
+        cout << "ID quản trị viên hoặc mã PIN không đúng, Vui lòng thử lại!" << endl;
+        cout << "Nhập ID quản trị viên: ";
         cin >> adminID;
-        cout << "Nhap ma PIN: ";
+        cout << "Nhập mã PIN: ";
         cin >> adminPin;
     }
-    cout << "Dang nhap thanh cong!" << endl;
+    cout << "Đăng nhập thành công!" << endl;
     return 1; // Return 1 to indicate successful admin login
 }
 
@@ -151,12 +141,11 @@ int Menu::loginAdmin() {
 // Create Account function
 void Menu::CreateAccount() {
     bank.createAccount();
-    cout << "Tai khoan da duoc tao thanh cong!" << endl;
 }
 
 // User Menu Functions
 void Menu::ViewAccountInfo(const Account& account) {
-    cout << "Thong tin tai khoan:" << endl;
+    cout << "Thông tin tài khoản: " << endl;
 	bank.showAccountInfo(account.getID());
 }
 
@@ -164,64 +153,64 @@ void Menu::ChangePin(Account& account) {
 
     // Check if the account is locked
     if (!account.isActive()) {
-        cout << "Tai khoan cua ban da bi khoa. Khong the thay doi ma PIN." << endl;
+        cout << "Tài khoản của bạn đã bị khóa. Không thể thay đổi mã PIN." << endl;
         return;
     }
 
     string newPin;
     // Require the user to enter the old PIN first
     string oldPin;
-    cout << "Nhap ma PIN cu: ";
+    cout << "Nhập mã PIN cũ: ";
     while (true) {
         cin >> oldPin;
         if (oldPin.length() == 4 && all_of(oldPin.begin(), oldPin.end(), ::isdigit) && account.verifyPin(oldPin)) {
             break; // Valid old PIN length
         } else {
-            cout << "Ma PIN khong hop le. Vui long nhap lai: ";
+            cout << "Mà PIN không hợp lệ. Vui lòng nhập lại: ";
         }
     }
-    cout << "Nhap ma PIN moi: ";
+    cout << "Nhập mã PIN mới (4 chữ số): ";
     while (true) {
         cin >> newPin;
         if (newPin.length() == 4 && all_of(newPin.begin(), newPin.end(), ::isdigit)) {
             break; // Valid new PIN length
         } else {
-            cout << "Ma PIN moi phai la 4 chu so. Vui long nhap lai: ";
+            cout << "Mã PIN mới phải là 4 chu so. Vui lòng nhập lại: ";
         }
     }
     account.changePin(newPin);
     // Save the new PIN to the file (optional, depending on your design)
     bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
-    cout << "Ma PIN da duoc thay doi thanh cong!" << endl;
+    cout << "Mã PIN đã được thay đổi thành công!" << endl;
 }
 
 void Menu::ViewTransactionsHistory(const Account& account) {
     // Check if the account is locked
     if (!account.isActive()) {
-        cout << "Tai khoan cua ban da bi khoa. Khong the xem lich su giao dich." << endl;
+        cout << "Tài khoản của bạn đã bị khóa. Không thể xem lịch sử giao dịch." << endl;
         return;
     }
 
-    cout << "Lich su giao dich:" << endl;
+    cout << "Lịch sử giao dịch:" << endl;
     // Assuming Transaction class has a static method to display transaction history
     Transaction::displayTransactionHistory(account.getID());
 }
 
 // Admin Menu Functions
 void Menu::ViewAllAccounts() {
-    cout << "Danh sach tat ca tai khoan:" << endl;
+    cout << "Danh sách tất cả tài khoản:" << endl;
     bank.showAllAccounts();
 }
 
 void Menu::SearchAccount() {
     string id;
-    cout << "Nhap ID tai khoan can tim: ";
+    cout << "Nhập ID tài khoản cần tìm: ";
     while (true) {
         cin >> id;
         if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit)) {
             break; // Valid ID length
         } else {
-            cout << "ID tai khoan phai la 6 chu so. Vui long nhap lai: ";
+            cout << "ID tài khoản phải là 6 chữ số. Vui lòng nhập lại: ";
         }
     }
     bank.showAccountInfo(id);
@@ -229,48 +218,48 @@ void Menu::SearchAccount() {
 
 void Menu::LockUnlockAccount() {
     string id;
-    cout << "Nhap ID tai khoan can khoa/mo: ";
+    cout << "Nhập ID tài khoản cần khóa/mở: ";
     while (true) {
         cin >> id;
         if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit)) {
             break; // Valid ID length
         } else {
-            cout << "ID tai khoan phai la 6 chu so. Vui long nhap lai: ";
+            cout << "ID tài khoản phải là 6 chữ số. Vui lòng nhập lại: ";
         }
     }
     Account* account = bank.findAccountByID(id);
     if (account) {
         if (account->isActive()) {
             account->lockAccount();
-            cout << "Tai khoan da duoc khoa." << endl;
+            cout << "Tài khoản đã được khoá." << endl;
             // Save the updated account status to the file
             bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
         } else {
             account->unlockAccount();
-            cout << "Tai khoan da duoc mo." << endl;
+            cout << "Tài khoản đã được mở" << endl;
             // Save the updated account status to the file
             bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
         }
     } else {
-        cout << "Khong tim thay tai khoan voi ID: " << id << endl;
+        cout << "Không tìm thấy ID tài khoản " << id << endl;
     }
 }
 
 // Transaction Menu Functions
 void Menu::Deposit(Account& account) {
     double amount;
-	cout << "Nhap so tien gui: ";
+	cout << "Nhập số tiền gửi: ";
 
     while (true) {
         cin >> amount;
         if (amount <= 0) {
-            cout << "So tien gui phai lon hon 0. Vui long nhap lai: ";
+            cout << "Số tiền gửi phải lớn hơn 0. Vui lòng nhập lại: ";
         } else {
             break; // Valid amount
         }
     }
     string note;
-    cout << "Nhap ghi chu (neu co): ";
+    cout << "Nhập ghi chú (nếu có): ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
     getline(cin, note);
 	// Randomly generate a transaction ID for simplicity
@@ -287,33 +276,33 @@ void Menu::Deposit(Account& account) {
 
 
     Transaction newTransaction = Transaction::deposit(transID, account.getID(), amount, timestamp, note);
-    Transaction::addTransaction(transID, "Gui tien", amount, newTransaction.getTimestamp(), note, account.getID(), "");
+    Transaction::addTransaction(transID, "Gửi tiền", amount, newTransaction.getTimestamp(), note, account.getID(), "");
         
     // Save bank account to file after deposit
     bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
     Transaction::saveTransactionsToFile("transactions.txt"); // Save transactions to file
 
     // Display success message
-    cout << "ID giao dich: " << transID << endl;
-    cout << "Gui tien thanh cong vao tai khoan: " << account.getID() << "!" << endl;
-    cout << "So du hien tai: " << account.getBalance() << endl;
+    cout << "ID giao dịch: " << transID << endl;
+    cout << "Gửi tiền thành công vào tài khoản: " << account.getID() << "!" << endl;
+    cout << "Số dư hiện tại: " << account.getBalance() << endl;
 }
 
 void Menu::Withdraw(Account& account) {
     double amount;
-    cout << "Nhap so tien rut: ";
+    cout << "Nhập số tiền rút: ";
     
     while (true) {
         cin >> amount;
         if (amount <= 0 || amount > account.getBalance()) {
-            cout << "So tien rut phai lon hon 0 va khong vuot qua so du hien tai. Vui long nhap lai: ";
+            cout << "Số tiền rút phải lớn hơn 0 va không vượt quá số dư hiện tại. Vui lòng nhập lại: ";
         } else {
             break; // Valid amount
         }
     }
 
     string note;
-    cout << "Nhap ghi chu (neu co): ";
+    cout << "Nhập ghi chú (nếu có): ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
     getline(cin, note);
     // Randomly generate a transaction ID for simplicity
@@ -327,44 +316,44 @@ void Menu::Withdraw(Account& account) {
     account.setBalance(account.getBalance() - amount);
 
     Transaction newTransaction = Transaction::withdraw(transID, account.getID(), amount, timestamp, note);
-    Transaction::addTransaction(transID, "Rut tien", amount, newTransaction.getTimestamp(), note, account.getID(), "");
+    Transaction::addTransaction(transID, "Rút tiền", amount, newTransaction.getTimestamp(), note, account.getID(), "");
 
     // Save bank account to file after deposit
     bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
     Transaction::saveTransactionsToFile("transactions.txt"); // Save transactions to file
 
     // Display success message
-    cout << "ID giao dich: " << transID << endl;
-    cout << "Rut tien thanh cong tu tai khoan: " << account.getID() << "!" << endl;
-    cout << "So du hien tai: " << account.getBalance() << endl;
+    cout << "ID giao dịch " << transID << endl;
+    cout << "Rút tiền thành công khỏi tài khoản: " << account.getID() << "!" << endl;
+    cout << "Số dư hiện tại: " << account.getBalance() << endl;
 }
 
 void Menu::Transfer(Account& account) {
     string toAccountID;
     double amount;
-    cout << "Nhap ID tai khoan chuyen khoan den: ";
+    cout << "Nhập ID tài khoản chuyển khoản đến: ";
     while (true) {
         cin >> toAccountID;
         if (toAccountID.length() == 6 && all_of(toAccountID.begin(), toAccountID.end(), ::isdigit) && toAccountID != account.getID()
             && bank.findAccountByID(toAccountID) != nullptr) {
             break; // Valid ID length
         } else {
-            cout << "ID tai khoan khong hop le. Vui long nhap lai: ";
+            cout << "ID tài khoản không hợp lệ. Vui lòng nhập lại: ";
         }
     }
 
-    cout << "Nhap so tien chuyen: ";
+    cout << "Nhập số tiền chuyển khoản: ";
     while (true) {
         cin >> amount;
         if (amount <= 0 || amount > account.getBalance()) {
-            cout << "So tien chuyen phai lon hon 0 va khong vuot qua so du hien tai. Vui long nhap lai: ";
+            cout << "Số tiền rút phải lớn hơn 0 va không vượt quá số dư hiện tại. Vui lòng nhập lại: ";
         } else {
             break; // Valid amount
         }
     }
 
     string note;
-    cout << "Nhap ghi chu (neu co): ";
+    cout << "Nhập ghi chú (nếu có): ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
     getline(cin, note);
 
@@ -383,16 +372,16 @@ void Menu::Transfer(Account& account) {
     }
 
     Transaction newTransaction = Transaction::transfer(transID, account.getID(), toAccountID, amount, timestamp, note);
-    Transaction::addTransaction(transID, "Chuyen khoan", amount, newTransaction.getTimestamp(), note, account.getID(), toAccountID);
+    Transaction::addTransaction(transID, "Chuyển khoản", amount, newTransaction.getTimestamp(), note, account.getID(), toAccountID);
 
     // Save bank account to file after deposit
     bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
     Transaction::saveTransactionsToFile("transactions.txt"); // Save transactions to file
 
     // Display success message
-    cout << "ID giao dich: " << transID << endl;
-    cout << "Chuyen khoan thanh cong tu tai khoan " << account.getID() << " den tai khoan " << toAccountID << "!" << endl;
-    cout << "So du hien tai: " << account.getBalance() << endl;
+    cout << "ID giao dịch " << transID << endl;
+    cout << "Chuyen khoan thanh cong tu tai khoan " << account.getID() << " đến tài khoản " << toAccountID << "!" << endl;
+    cout << "Số dư hiện tại " << account.getBalance() << endl;
 }
 
 
