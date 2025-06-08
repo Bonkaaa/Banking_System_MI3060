@@ -58,6 +58,14 @@ int main() {
                                 break;
                             case 3: // Transaction menu
                             {
+                                // Check if the account is active before proceeding with transactions
+                                if (account->isLocked()) {
+                                    cout << "Tai khoan cua ban da bi khoa. Khong the thuc hien giao dich." << endl;
+                                    cout << "Nhan phim bat ky de ve menu chinh..." << endl;
+                                    getch();
+                                    break;
+                                }
+
                                 int transactionChoice = Menu::TransactionMenu(*account);
                                 switch (transactionChoice) {
                                     case 0: // Deposit

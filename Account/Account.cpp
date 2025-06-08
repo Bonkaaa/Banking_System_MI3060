@@ -47,3 +47,8 @@ void Account::setBalance(double newBalance) {
     assert(newBalance >= 0); // Ensure balance cannot be negative
     balance = newBalance;
 }
+
+// Check if account is locked
+bool Account::isLocked() const {
+    return (status == "Bi khoa") ? true : false; // Assuming "Bi khoa" means locked
+}

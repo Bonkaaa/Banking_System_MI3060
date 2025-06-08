@@ -149,4 +149,12 @@ CMakeFiles/BankingSystem.dir/Menu/Menu.cpp.obj: \
  C:/dsa/Banking_System_MI3060/Account/Account.h \
  C:/dsa/Banking_System_MI3060/Transaction/Transaction.h \
  C:/msys64/ucrt64/include/conio.h \
- C:/msys64/ucrt64/include/sec_api/conio_s.h
+ C:/msys64/ucrt64/include/sec_api/conio_s.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/algorithm \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_algo.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_heap.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/uniform_int_dist.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tempbuf.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_algorithm_defs.h \
+ C:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h

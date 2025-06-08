@@ -37,5 +37,11 @@ class Account {
 
         // Set balance
         void setBalance(double newBalance);
+
+        // Check if account is locked
+        bool isLocked() const;
 };
-#endif
+
+#endif 
+
+        

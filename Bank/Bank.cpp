@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 Bank::Bank() {}
@@ -16,13 +17,27 @@ void Bank::createAccount() {
     string id, name, pin;
     double initialBalance;
 
-    cout << "Nhap ID tai khoan: ";
-    cin >> id;
+    cout << "Nhap ID tai khoan (6 chu so): ";
+    while (true) {
+        cin >> id;
+        if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit)) {
+            break; // Valid ID
+        } else {
+            cout << "ID khong hop le. Vui long nhap lai (6 chu so): ";
+        }
+    }
     cout << "Nhap ten chu tai khoan: ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear newline from previous input
     getline(cin, name);
     cout << "Nhap ma PIN (4 chu so): ";
-    cin >> pin;
+    while (true) {
+        cin >> pin;
+        if (pin.length() == 4 && all_of(pin.begin(), pin.end(), ::isdigit)) {
+            break; // Valid PIN
+        } else {
+            cout << "Ma PIN khong hop le. Vui long nhap lai (4 chu so): ";
+        }
+    }
     cout << "Nhap so du khoi tao: ";
     cin >> initialBalance;
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <conio.h> // For menu navigation
+#include <algorithm>
 
 using namespace std;
 
@@ -98,9 +99,23 @@ void Menu::Exit() {
 string Menu::Login() {
     string accountID, pin;
     cout << "Nhap ID tai khoan: ";
-    cin >> accountID;
+    while (true) {
+        cin >> accountID;
+        if (accountID.length() == 6 && all_of(accountID.begin(), accountID.end(), ::isdigit)) {
+            break; // Valid ID length
+        } else {
+            cout << "ID tai khoan phai la 6 chu so. Vui long nhap lai: ";
+        }
+    }
     cout << "Nhap ma PIN: ";
-    cin >> pin;
+    while (true) {
+        cin >> pin;
+        if (pin.length() == 4 && all_of(pin.begin(), pin.end(), ::isdigit)) {
+            break; // Valid PIN length
+        } else {
+            cout << "Ma PIN phai la 4 chu so. Vui long nhap lai: ";
+        }
+    }
 
     Account* account = bank.findAccountByID(accountID);
 
@@ -121,13 +136,15 @@ int Menu::loginAdmin() {
     cout << "Nhap ma PIN: ";
     cin >> adminPin;
 
-    // Assuming you have a predefined admin account for simplicity
-    if (adminID == "admin" && adminPin == "admin123") {
-        return 1; // Admin login successful
-    } else {
+    while (adminID != "admin" || adminPin != "admin123") {
         cout << "ID quan tri vien hoac ma PIN khong dung. Vui long thu lai." << endl;
-        return 0; // Admin login failed
+        cout << "Nhap ID quan tri vien: ";
+        cin >> adminID;
+        cout << "Nhap ma PIN: ";
+        cin >> adminPin;
     }
+    cout << "Dang nhap thanh cong!" << endl;
+    return 1; // Return 1 to indicate successful admin login
 }
 
 
@@ -144,26 +161,47 @@ void Menu::ViewAccountInfo(const Account& account) {
 }
 
 void Menu::ChangePin(Account& account) {
+
+    // Check if the account is locked
+    if (!account.isActive()) {
+        cout << "Tai khoan cua ban da bi khoa. Khong the thay doi ma PIN." << endl;
+        return;
+    }
+
     string newPin;
     // Require the user to enter the old PIN first
     string oldPin;
     cout << "Nhap ma PIN cu: ";
-    cin >> oldPin;
-    if (!account.verifyPin(oldPin)) {
-        cout << "Ma PIN cu khong dung. Khong the thay doi ma PIN." << endl;
-        return;
+    while (true) {
+        cin >> oldPin;
+        if (oldPin.length() == 4 && all_of(oldPin.begin(), oldPin.end(), ::isdigit) && account.verifyPin(oldPin)) {
+            break; // Valid old PIN length
+        } else {
+            cout << "Ma PIN khong hop le. Vui long nhap lai: ";
+        }
     }
-    else {
-        cout << "Nhap ma PIN moi: ";
+    cout << "Nhap ma PIN moi: ";
+    while (true) {
         cin >> newPin;
-        account.changePin(newPin);
-        // Save the new PIN to the file (optional, depending on your design)
-        bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
-        cout << "Ma PIN da duoc thay doi thanh cong!" << endl;
+        if (newPin.length() == 4 && all_of(newPin.begin(), newPin.end(), ::isdigit)) {
+            break; // Valid new PIN length
+        } else {
+            cout << "Ma PIN moi phai la 4 chu so. Vui long nhap lai: ";
+        }
     }
+    account.changePin(newPin);
+    // Save the new PIN to the file (optional, depending on your design)
+    bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
+    cout << "Ma PIN da duoc thay doi thanh cong!" << endl;
 }
 
 void Menu::ViewTransactionsHistory(const Account& account) {
+    // Check if the account is locked
+    if (!account.isActive()) {
+        cout << "Tai khoan cua ban da bi khoa. Khong the xem lich su giao dich." << endl;
+        return;
+    }
+
     cout << "Lich su giao dich:" << endl;
     // Assuming Transaction class has a static method to display transaction history
     Transaction::displayTransactionHistory(account.getID());
@@ -178,14 +216,28 @@ void Menu::ViewAllAccounts() {
 void Menu::SearchAccount() {
     string id;
     cout << "Nhap ID tai khoan can tim: ";
-    cin >> id;
+    while (true) {
+        cin >> id;
+        if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit)) {
+            break; // Valid ID length
+        } else {
+            cout << "ID tai khoan phai la 6 chu so. Vui long nhap lai: ";
+        }
+    }
     bank.showAccountInfo(id);
 }
 
 void Menu::LockUnlockAccount() {
     string id;
     cout << "Nhap ID tai khoan can khoa/mo: ";
-    cin >> id;
+    while (true) {
+        cin >> id;
+        if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit)) {
+            break; // Valid ID length
+        } else {
+            cout << "ID tai khoan phai la 6 chu so. Vui long nhap lai: ";
+        }
+    }
     Account* account = bank.findAccountByID(id);
     if (account) {
         if (account->isActive()) {
@@ -208,100 +260,107 @@ void Menu::LockUnlockAccount() {
 void Menu::Deposit(Account& account) {
     double amount;
 	cout << "Nhap so tien gui: ";
-    cin >> amount;
 
-    if (amount <= 0) {
-        cout << "So tien nap phai lon hon 0!" << endl;
-        return;
+    while (true) {
+        cin >> amount;
+        if (amount <= 0) {
+            cout << "So tien gui phai lon hon 0. Vui long nhap lai: ";
+        } else {
+            break; // Valid amount
+        }
     }
+    string note;
+    cout << "Nhap ghi chu (neu co): ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+    getline(cin, note);
+	// Randomly generate a transaction ID for simplicity
+	string transID;
+	do {
+		transID	 = "trans" + to_string(rand() % 100000); // Random transaction ID
+	} while (Transaction::isTransactionIDExists(transID));
 
-	else {
-        string note;
-        cout << "Nhap ghi chu (neu co): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
-        getline(cin, note);
-		// Randomly generate a transaction ID for simplicity
-		string transID;
-		do {
-			transID	 = "trans" + to_string(rand() % 100000); // Random transaction ID
-		} while (Transaction::isTransactionIDExists(transID));
+    // Get current timestamp
+    string timestamp = Transaction::getCurrentTime();
 
-        // Get current timestamp
-        string timestamp = Transaction::getCurrentTime();
-
-        // Update account balance
-        account.setBalance(account.getBalance() + amount);
+    // Update account balance
+    account.setBalance(account.getBalance() + amount);
 
 
-        Transaction newTransaction = Transaction::deposit(transID, account.getID(), amount, timestamp, note);
-        Transaction::addTransaction(transID, "deposit", amount, newTransaction.getTimestamp(), note, account.getID(), "");
+    Transaction newTransaction = Transaction::deposit(transID, account.getID(), amount, timestamp, note);
+    Transaction::addTransaction(transID, "Gui tien", amount, newTransaction.getTimestamp(), note, account.getID(), "");
         
-        // Save bank account to file after deposit
-        bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
-        Transaction::saveTransactionsToFile("transactions.txt"); // Save transactions to file
+    // Save bank account to file after deposit
+    bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
+    Transaction::saveTransactionsToFile("transactions.txt"); // Save transactions to file
 
-        // Display success message
-        cout << "ID giao dich: " << transID << endl;
-        cout << "Gui tien thanh cong vao tai khoan: " << account.getID() << "!" << endl;
-        cout << "So du hien tai: " << account.getBalance() << endl;
-    }
+    // Display success message
+    cout << "ID giao dich: " << transID << endl;
+    cout << "Gui tien thanh cong vao tai khoan: " << account.getID() << "!" << endl;
+    cout << "So du hien tai: " << account.getBalance() << endl;
 }
 
 void Menu::Withdraw(Account& account) {
     double amount;
     cout << "Nhap so tien rut: ";
-    cin >> amount;
-
-    if (amount <= 0 || amount > account.getBalance()) {
-        cout << "So du hien tai khong du de rut tien" << endl;
-        return;
+    
+    while (true) {
+        cin >> amount;
+        if (amount <= 0 || amount > account.getBalance()) {
+            cout << "So tien rut phai lon hon 0 va khong vuot qua so du hien tai. Vui long nhap lai: ";
+        } else {
+            break; // Valid amount
+        }
     }
-    else {
-        string note;
-        cout << "Nhap ghi chu (neu co): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
-        getline(cin, note);
-        // Randomly generate a transaction ID for simplicity
-        string transID;
-        do {
-            transID = "trans" + to_string(rand() % 100000); // Random transaction ID
-        } while (Transaction::isTransactionIDExists(transID));
-        string timestamp = Transaction::getCurrentTime();
 
-        // Update account balance
-        account.setBalance(account.getBalance() - amount);
+    string note;
+    cout << "Nhap ghi chu (neu co): ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+    getline(cin, note);
+    // Randomly generate a transaction ID for simplicity
+    string transID;
+    do {
+        transID = "trans" + to_string(rand() % 100000); // Random transaction ID
+    } while (Transaction::isTransactionIDExists(transID));
+    string timestamp = Transaction::getCurrentTime();
 
-        Transaction newTransaction = Transaction::withdraw(transID, account.getID(), amount, timestamp, note);
-        Transaction::addTransaction(transID, "withdraw", amount, newTransaction.getTimestamp(), note, account.getID(), "");
+    // Update account balance
+    account.setBalance(account.getBalance() - amount);
 
-        // Save bank account to file after deposit
-        bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
-        Transaction::saveTransactionsToFile("transactions.txt"); // Save transactions to file
+    Transaction newTransaction = Transaction::withdraw(transID, account.getID(), amount, timestamp, note);
+    Transaction::addTransaction(transID, "Rut tien", amount, newTransaction.getTimestamp(), note, account.getID(), "");
 
-        // Display success message
-        cout << "ID giao dich: " << transID << endl;
-        cout << "Rut tien thanh cong tu tai khoan: " << account.getID() << "!" << endl;
-        cout << "So du hien tai: " << account.getBalance() << endl;
-    }
+    // Save bank account to file after deposit
+    bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
+    Transaction::saveTransactionsToFile("transactions.txt"); // Save transactions to file
+
+    // Display success message
+    cout << "ID giao dich: " << transID << endl;
+    cout << "Rut tien thanh cong tu tai khoan: " << account.getID() << "!" << endl;
+    cout << "So du hien tai: " << account.getBalance() << endl;
 }
 
 void Menu::Transfer(Account& account) {
     string toAccountID;
     double amount;
-    cout << "Nhap ID tai khoan nhan: ";
-    cin >> toAccountID;
-    Account* toAccount = bank.findAccountByID(toAccountID);
-    if (!toAccount) {
-        cout << "Khong tim thay tai khoan voi ID: " << toAccountID << endl;
-        return;
+    cout << "Nhap ID tai khoan chuyen khoan den: ";
+    while (true) {
+        cin >> toAccountID;
+        if (toAccountID.length() == 6 && all_of(toAccountID.begin(), toAccountID.end(), ::isdigit) && toAccountID != account.getID()
+            && bank.findAccountByID(toAccountID) != nullptr) {
+            break; // Valid ID length
+        } else {
+            cout << "ID tai khoan khong hop le. Vui long nhap lai: ";
+        }
     }
 
     cout << "Nhap so tien chuyen: ";
-    cin >> amount;
-
-    if (amount <= 0 || amount > account.getBalance()) {
-        cout << "Khong du so du de thuc hien giao dich" << endl;
-        return;
+    while (true) {
+        cin >> amount;
+        if (amount <= 0 || amount > account.getBalance()) {
+            cout << "So tien chuyen phai lon hon 0 va khong vuot qua so du hien tai. Vui long nhap lai: ";
+        } else {
+            break; // Valid amount
+        }
     }
 
     string note;
@@ -318,10 +377,13 @@ void Menu::Transfer(Account& account) {
 
     // Update account balances
     account.setBalance(account.getBalance() - amount);
-    toAccount->setBalance(toAccount->getBalance() + amount);
+    Account* toAccount = bank.findAccountByID(toAccountID);
+    if (toAccount) {
+        toAccount->setBalance(toAccount->getBalance() + amount);
+    }
 
     Transaction newTransaction = Transaction::transfer(transID, account.getID(), toAccountID, amount, timestamp, note);
-    Transaction::addTransaction(transID, "transfer", amount, newTransaction.getTimestamp(), note, account.getID(), toAccountID);
+    Transaction::addTransaction(transID, "Chuyen khoan", amount, newTransaction.getTimestamp(), note, account.getID(), toAccountID);
 
     // Save bank account to file after deposit
     bank.saveAccountsToFile("accounts.txt"); // Save accounts to file
