@@ -86,24 +86,24 @@ void Transaction::addTransaction(
 // Display transaction history for a given fromAccountID
 void Transaction::displayTransactionHistory(const string& fromID) {
 	TransactionNode* temp = ::transactionHead;
-    cout << "Lich su giao dich cua tai khoan " << fromID << endl;
+    cout << "Lịch sử giao dịch " << fromID << endl;
     while (temp) {
         const Transaction& t = temp->transaction;
         if (t.getFromAccountID() == fromID) {
 			if (t.getType() == "transfer") {
             	cout << "ID: " << t.getTransactionID()
-                 	<< ", Loai giao dich: " << t.getType()
-                 	<< ", So tien: " << t.getAmount()
-                 	<< ", Thoi gian: " << t.getTimestamp()
-                 	<< ", Ghi chu: " << t.getNote()
-                 	<< ", Toi tai khoan: " << t.getToAccountID()
+                 	<< ", Loại giao dịch: " << t.getType()
+                 	<< ", Số tiền: " << t.getAmount()
+                 	<< ", Thời gian: " << t.getTimestamp()
+                 	<< ", Ghi chú: " << t.getNote()
+                 	<< ", Tới tài khoản: " << t.getToAccountID()
                  	<< endl;
 			} else {
 				cout << "ID: " << t.getTransactionID()
-				 	<< ", Loai giao dich: " << t.getType()
-				 	<< ", So tien: " << t.getAmount()
-				 	<< ", Thoi gian: " << t.getTimestamp()
-				 	<< ", Ghi chu: " << t.getNote()
+				 	<< ", Loại giao dịch: " << t.getType()
+				 	<< ", Số tiền: " << t.getAmount()
+				 	<< ", Thời gian: " << t.getTimestamp()
+				 	<< ", Ghi chú: " << t.getNote()
 				 	<< endl;
 			}
         }
@@ -119,7 +119,7 @@ Transaction Transaction::deposit(
 	const string& timeStamp,
 	const string& note
 ) {
-	return Transaction(transID, "deposit", amount, timeStamp, note, fromAccountID, "");
+	return Transaction(transID, "", amount, timeStamp, note, fromAccountID, "");
 }
 
 Transaction Transaction::withdraw(
@@ -129,7 +129,7 @@ Transaction Transaction::withdraw(
 	const string& timeStamp,
 	const string& note
 ) {
-	return Transaction(transID, "withdrawal", amount, timeStamp, note, fromAccountID, "");
+	return Transaction(transID, "", amount, timeStamp, note, fromAccountID, "");
 }
 
 Transaction Transaction::transfer(
@@ -140,7 +140,7 @@ Transaction Transaction::transfer(
 	const string& timeStamp,
 	const string& note
 ) {
-	return Transaction(transID, "transfer", amount, timeStamp, note, fromAccountID, toAccountID);
+	return Transaction(transID, "", amount, timeStamp, note, fromAccountID, toAccountID);
 }
 
 // Helper function to get the current time in the required format

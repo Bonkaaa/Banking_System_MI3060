@@ -58,7 +58,7 @@ int Menu::AdminMenu(const string& adminName) {
 // User Menu
 int Menu::UserMenu(const Account& account) {
     vector<string> options = {
-        "Xem thong tin tai khoan",
+        "Xem thông tin tài khoản",
         "Đổi mã PIN",
         "Xem lịch sử giao dịch",
         "Thực hiện giao dịch",
@@ -90,11 +90,10 @@ string Menu::Login() {
     while (true) {
         cin >> accountID;
         // Check if the account ID is exactly 6 digits long and consists only of digits and is not occupied
-        if (accountID.length() == 6 && all_of(accountID.begin(), accountID.end(), ::isdigit) 
-        && bank.findAccountByID(accountID) == nullptr) {
+        if (accountID.length() == 6 && all_of(accountID.begin(), accountID.end(), ::isdigit)) {
             break; // Valid ID length
         } else {
-            cout << "ID tài khoản phải là 6 chữ số. Vui lòng nhập lại: ";
+            cout << "ID tài khoản không hợp lệ. Vui lòng nhập lại: ";
         }
     }
     cout << "Nhập mã PIN (4 chữ số): ";
@@ -103,7 +102,7 @@ string Menu::Login() {
         if (pin.length() == 4 && all_of(pin.begin(), pin.end(), ::isdigit)) {
             break; // Valid PIN length
         } else {
-            cout << "Mã PIN phải là 4 chữ số. Vui lòng nhập lại: ";
+            cout << "Mã PIN không hợp lệ. Vui lòng nhập lại: ";
         }
     }
 

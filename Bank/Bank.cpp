@@ -20,7 +20,7 @@ void Bank::createAccount() {
     cout << "Nhập ID tài khoản (6 chữ số): ";
     while (true) {
         cin >> id;
-        if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit)) {
+        if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit) && findAccountByID(id) == nullptr) {
             break; // Valid ID
         } else {
             cout << "ID tài khoản phải là 6 chữ số. Vui lòng nhập lại: ";
