@@ -86,17 +86,26 @@ void Transaction::addTransaction(
 // Display transaction history for a given fromAccountID
 void Transaction::displayTransactionHistory(const string& fromID) {
 	TransactionNode* temp = ::transactionHead;
-    cout << "Transaction History for Account: " << fromID << endl;
+    cout << "Lich su giao dich cua tai khoan " << fromID << endl;
     while (temp) {
         const Transaction& t = temp->transaction;
         if (t.getFromAccountID() == fromID) {
-            cout << "ID: " << t.getTransactionID()
-                 << ", Type: " << t.getType()
-                 << ", Amount: " << t.getAmount()
-                 << ", Timestamp: " << t.getTimestamp()
-                 << ", Note: " << t.getNote()
-                 << ", To: " << t.getToAccountID()
-                 << endl;
+			if (t.getType() == "transfer") {
+            	cout << "ID: " << t.getTransactionID()
+                 	<< ", Loai giao dich: " << t.getType()
+                 	<< ", So tien: " << t.getAmount()
+                 	<< ", Thoi gian: " << t.getTimestamp()
+                 	<< ", Ghi chu: " << t.getNote()
+                 	<< ", Toi tai khoan: " << t.getToAccountID()
+                 	<< endl;
+			} else {
+				cout << "ID: " << t.getTransactionID()
+				 	<< ", Loai giao dich: " << t.getType()
+				 	<< ", So tien: " << t.getAmount()
+				 	<< ", Thoi gian: " << t.getTimestamp()
+				 	<< ", Ghi chu: " << t.getNote()
+				 	<< endl;
+			}
         }
         temp = temp->next;
     }
@@ -110,14 +119,6 @@ Transaction Transaction::deposit(
 	const string& timeStamp,
 	const string& note
 ) {
-	// Find the account by fromAccountID and increase its balance
-	Account* account = bank.findAccountByID(fromAccountID);
-	if (account) {
-		account->setBalance(account->getBalance() + amount);
-	}
-	cout << "Deposit successful to account " << fromAccountID
-		 << ". Amount: " << amount << endl;
-	// Return the deposit transaction object
 	return Transaction(transID, "deposit", amount, timeStamp, note, fromAccountID, "");
 }
 
@@ -128,19 +129,6 @@ Transaction Transaction::withdraw(
 	const string& timeStamp,
 	const string& note
 ) {
-	// Find the account by fromAccountID and decrease its balance
-	Account* account = bank.findAccountByID(fromAccountID);
-	if (account) {
-		if (account->getBalance() >= amount) {
-			account->setBalance(account->getBalance() - amount);
-		} else {
-			cout << "Insufficient balance for withdrawal.\n";
-			return Transaction(transID, "withdrawal", 0, timeStamp, note, fromAccountID, "");
-		}
-	}
-	cout << "Withdrawal successful from account " << fromAccountID
-		 << ". Amount: " << amount << endl;
-	// Return the withdrawal transaction object
 	return Transaction(transID, "withdrawal", amount, timeStamp, note, fromAccountID, "");
 }
 
@@ -152,23 +140,7 @@ Transaction Transaction::transfer(
 	const string& timeStamp,
 	const string& note
 ) {
-	// Find the fromAccount and toAccount
-	Account* fromAccount = bank.findAccountByID(fromAccountID);
-	Account* toAccount = bank.findAccountByID(toAccountID);
-
-	if (fromAccount && toAccount) {
-		if (fromAccount->getBalance() >= amount) {
-			fromAccount->setBalance(fromAccount->getBalance() - amount);
-			toAccount->setBalance(toAccount->getBalance() + amount);
-		} else {
-			cout << "Insufficient balance for transfer.\n";
-		}
-		return Transaction(transID, "transfer", amount, timeStamp, note, fromAccountID, toAccountID);
-		cout << "Transfer successful from " << fromAccountID << " to " << toAccountID
-			 << ". Amount: " << amount << endl;
-	} else {
-		cout << "One or both accounts not found for transfer.\n";
-	}
+	return Transaction(transID, "transfer", amount, timeStamp, note, fromAccountID, toAccountID);
 }
 
 // Helper function to get the current time in the required format
@@ -208,7 +180,7 @@ void Transaction::clearTransactionList() {
 void Transaction::loadTransactionsFromFile(const string& filename) {
     ifstream fin(filename);
     if (!fin.is_open()) {
-        cout << "Error opening file to load transactions.\n";
+        cout << "Gap loi khi load file\n";
         return;
     }
 
@@ -249,7 +221,7 @@ void Transaction::loadTransactionsFromFile(const string& filename) {
 void Transaction::saveTransactionsToFile(const string& filename) {
 	ofstream fout(filename);
 	if (!fout.is_open()) {
-		cout << "Error opening file to save transactions.\n";
+		cout << "Gap loi khi mo file\n";
 		return;
 	}
 

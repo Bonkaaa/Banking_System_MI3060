@@ -26,14 +26,16 @@ void Bank::createAccount() {
     cout << "Nhap so du khoi tao: ";
     cin >> initialBalance;
 
-    Account newAccount(id, name, pin, initialBalance, "active");
+    string status = "Hoat dong"; // Default status for new accounts
+
+    Account newAccount(id, name, pin, initialBalance, status);
     accountList.push_back(newAccount);
     cout << "Tai khoan duoc khoi tao thanh cong.\n";
 
     // Save to file 
     ofstream fout("accounts.txt", ios::app);
     if (fout.is_open()) {
-        fout << id << "," << name << "," << pin << "," << initialBalance << ",active\n";
+        fout << id << "," << name << "," << pin << "," << initialBalance << status << endl;
         fout.close();
     } else {
         cout << "Gap loi khi moi file\n";
@@ -45,10 +47,9 @@ Account* Bank::findAccountByID(const string& id) {
 	for (auto& account : accountList) {
 		if (account.getID() == id) {
 			return &account;
-            }
         }
-    cout << "Khong tim thay tai khoan voi ID: " << id << endl;
-    return nullptr; // Not found
+    }
+    return nullptr; // Return nullptr if not found
 }
 
 // Show information of an account by ID
@@ -68,7 +69,6 @@ void Bank::showAccountInfo(const string& id) {
 }
 
 void Bank::showAllAccounts() {
-    cout << "All Accounts:\n";
     for (const auto& account : accountList) {
         cout << "--------------------------------\n";
         cout << "ID tai khoan: " << account.getID() << ", Ten chu tai khoan: " << account.getOwnerName()

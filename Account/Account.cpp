@@ -22,7 +22,7 @@ string Account::getPin() const {
 }
 
 bool Account::isActive() const {
-    return (status == "Active") ? true : false; // Assuming "Hoat dong" means active
+    return (status == "Hoat dong") ? true : false; // Assuming "Hoat dong" means active
 }
 
 // PIN Management
@@ -36,11 +36,11 @@ void Account::changePin(string& newPIN) {
 
 // Lock/Unlock Account
 void Account::lockAccount() {
-    status = "Inactive"; // Assuming "Hoat dong" means active and "Inactive" means locked
+    status = "Bi khoa"; // Assuming "Hoat dong" means active and "Inactive" means locked
 }  
 
 void Account::unlockAccount() {
-    status = "Active"; // Assuming "Hoat dong" means active
+    status = "Hoat dong"; // Assuming "Hoat dong" means active
 }
 
 void Account::setBalance(double newBalance) {

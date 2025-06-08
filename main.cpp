@@ -79,7 +79,9 @@ int main() {
                                         cout << "Lua chon khong hop le." << endl;
                                         break;
                                 }
+                                break;
                             }
+                                break;
                             case 4: // Logout
                                 stayInUserMenu = false;
                                 userLoginStatus = 0; // Reset user login status
