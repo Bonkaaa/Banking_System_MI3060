@@ -3,7 +3,7 @@
 #include "../Bank/Bank.h"
 #include <iostream>
 #include <ctime>
-#include <iomanip>
+#include <iomanip> // For formatting time
 #include <fstream>
 using namespace std;
 
@@ -86,7 +86,7 @@ void Transaction::addTransaction(
 // Display transaction history for a given fromAccountID
 void Transaction::displayTransactionHistory(const string& fromID) {
 	TransactionNode* temp = ::transactionHead;
-    cout << "Lịch sử giao dịch " << fromID << endl;
+    cout << "Lịch sử giao dịch của tài khoản " << fromID << endl;
     while (temp) {
         const Transaction& t = temp->transaction;
         if (t.getFromAccountID() == fromID) {

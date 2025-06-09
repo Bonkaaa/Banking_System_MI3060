@@ -23,7 +23,7 @@ void Bank::createAccount() {
         if (id.length() == 6 && all_of(id.begin(), id.end(), ::isdigit) && findAccountByID(id) == nullptr) {
             break; // Valid ID
         } else {
-            cout << "ID tài khoản phải là 6 chữ số. Vui lòng nhập lại: ";
+            cout << "ID tài khoản không hợp lệ do không phải là 6 chữ số hoặc bị trùng ID. Vui lòng nhập lại: ";
         }
     }
     cout << "Nhập tên chủ tài khoản: ";

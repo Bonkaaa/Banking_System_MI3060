@@ -29,7 +29,7 @@ int main() {
         // Main menu loop
         string accountID;
         Account* account = nullptr;
-        int choice = Menu::ShowArrowMenu(mainMenuOptions, "Menu chương trình");
+        int choice = Menu::ShowArrowMenu(mainMenuOptions, "Menu chương trình quản lý ngân hàng");
         switch (choice) {
             case 0: // Dang nhap
                 accountID = menu.Login();

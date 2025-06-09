@@ -13,7 +13,7 @@ class Account {
         string ownerName;
         double balance;
         string pin;
-        string status; // "active" or "inactive"
+        string status; 
 
     public:
         // Constructor and Destructor

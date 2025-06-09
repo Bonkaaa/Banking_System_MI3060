@@ -382,10 +382,3 @@ void Menu::Transfer(Account& account) {
     cout << "Chuyen khoan thanh cong tu tai khoan " << account.getID() << " đến tài khoản " << toAccountID << "!" << endl;
     cout << "Số dư hiện tại " << account.getBalance() << endl;
 }
-
-
-
-    
-
-
-
